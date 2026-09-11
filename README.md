@@ -58,14 +58,14 @@ The flow is already wired: clicking "Sign in with Google" on the client hits `GE
 **Server:**
 ```bash
 cd server
-cp .env.example .env   # then fill in the real values
+cp .env .env   # then fill in the real values
 npm run dev
 ```
 
 **Client:**
 ```bash
 cd client
-cp .env.example .env   # defaults should work as-is for local dev
+cp .env .env   # defaults should work as-is for local dev
 npm run dev
 ```
 

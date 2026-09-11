@@ -1,0 +1,17 @@
+import mobilePoster from "/mobile-hero-2k.jpeg"
+import cakeSample from "/design/love.png"
+import cake1 from "/icons/cake1.png"
+import cake2 from "/icons/cake2.png"
+import cake3 from "/icons/cake3.png"
+import cake4 from "/icons/cake4.png"
+import almond from "/icons/almond.png"
+import cashew from "/icons/cashew.png"
+import walnut from "/icons/walnut.png"
+import category from "/icons/category.png"
+import pastryBag from "/icons/pastry-bag.png"
+import strawberry from "/icons/strawberry.png"
+import mango from "/icons/mango.png"
+import pineapple from "/icons/pineapple.png"
+import quality from "/icons/quality.png"
+
+export { mobilePoster, category, walnut, cake2, cashew, almond, mango, cake3, cake1, pineapple, cake4, pastryBag, cakeSample, strawberry, quality }

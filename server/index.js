@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 
 import connectDB from "./src/config/db.js";
+import "./src/config/env.js";
 import passport from "./src/config/passport.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import uploadRoutes from "./src/routes/uploadRoutes.js";
