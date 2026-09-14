@@ -1,16 +1,23 @@
-    import { useRef} from "react";
-    import { ArrowLeft, StepForward, StepBack, Sparkles, Info } from "lucide-react"
+    import { useState, useRef} from "react";
+    import { ArrowLeft, StepForward, StepBack, Sparkles, Info, Check, Play } from "lucide-react"
+
     import ProductCard from "@/components/ProductCard";
+    import GalleryButton from "@/components/CoolButton.jsx";
+
 
     import { mobilePoster, category, walnut, cake2, cashew, almond,
             mango, cake3, cake1, pineapple, cake4, pastryBag, cakeSample,
-            strawberry, quality } from "@/assets/assets.js"
+            strawberry, quality, whatsapp, instagram, facebook, truck, contact,
+            youtube, avatar, youtubeLogo
+    } from "@/assets/assets.js"
 
     export default function Home() {
-        const scrollRef = useRef(null);
-
         const videoUrl = "https://res.cloudinary.com/k9uw0ie2/video/upload/v1788412955/TensorPix_-_vid-NO-watermark-4k.mp4"
         const posterUrl = "https://res.cloudinary.com/k9uw0ie2/video/upload/f_auto,q_auto/Cupcake_with_cream_pouring_202606300145.jpg"
+
+        const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+        const scrollRef = useRef(null);
 
         const products = [
             {
@@ -95,12 +102,13 @@
                             <div className={`font-heading text-neutral text-4xl flex flex-col items-center justify-center gap-5`}>
                                 <span>حلويات</span> بتفرح الألب
                             </div>
-                            <button className={`btn text-lg font-medium px-10`}>
-                                القائمة
-                            </button>
+                            <GalleryButton link={`#`} text={`القائمة`} showTail={false}/>
                         </div>
-                        <div className={`font-heading text-neutral text-4xl flex flex-col items-center justify-center gap-5`}>
+                        <div className={`flex flex-col items-center justify-center gap-10`}>
+                            <div className={`font-heading text-neutral text-4xl flex flex-col items-center justify-center gap-5`}>
                             من المطبخ <span>للبيت</span>
+                            </div>
+                            <GalleryButton link={`#`} text={`المعرض`}/>
                         </div>
                     </div>
                 </section>
@@ -575,53 +583,159 @@
                             </div>
                         </div>
                         {/* Delivery */}
-                        <div>
-                            <div>
-                                <div>التوصيل</div>
-                                <div>التوصيل متوفر لجميع الجامعات وكافة المناطق </div>
-                                <div>إمكانية الاستلام مباشرة من موقعنا 📍</div>
-                            </div>
-                            <div>
-                                <div>
-                                    تواصل معنا للطلب المباشر
+                        <div className={`w-full flex items-start justify-center gap-50 bg-neutral rounded-sm p-10`}>
+                            <div className={`flex flex-col gap-5`}>
+                                <div className={`text-md font-semibold flex items-center gap-2`}>
+                                    <img src={truck} alt="truck" className={`w-15`}/>
+                                    <div>التوصيل</div>
                                 </div>
-                                <div>
+                                <div className={`text-sm font-bold text-gray-500`}>التوصيل متوفر لجميع الجامعات وكافة المناطق </div>
+                                <div className={`text-sm font-bold text-gray-500`}>إمكانية الاستلام مباشرة من موقعنا 📍</div>
+                            </div>
+                            <div className={`flex flex-col gap-5`}>
+                                <div className={`text-md font-semibold flex items-center gap-5`}>
+                                    <img src={contact} alt="contact" className={`w-10`}/>
                                     <div>
-                                        <div>
-
+                                         تواصل معنا للطلب المباشر
+                                    </div>
+                                </div>
+                                <div className={`flex flex-col gap-5 px-2`}>
+                                    <div className={`flex items-center gap-2 cursor-pointer`}>
+                                        <a className={`w-7`}>
+                                            <img
+                                                src={whatsapp}
+                                                alt="whatsapp"
+                                                className={``}
+                                            />
+                                        </a>
+                                        <div dir={`ltr`}>
+                                            +962 xxxxxxxxx
                                         </div>
-                                        <div>
-
+                                    </div>
+                                    <div className={`flex items-center gap-2 cursor-pointer`}>
+                                        <a className={`w-7`}>
+                                            <img
+                                                src={instagram}
+                                                alt="whatsapp"
+                                                className={``}
+                                            />
+                                        </a>
+                                        <div dir={`ltr`}>
+                                            Sawsan_cake
+                                        </div>
+                                    </div>
+                                    <div className={`flex items-center gap-2 cursor-pointer`}>
+                                        <a className={`w-7`}>
+                                            <img
+                                                src={facebook}
+                                                alt="whatsapp"
+                                                className={``}
+                                            />
+                                        </a>
+                                        <div dir={`ltr`}>
+                                            Sawsan Cake
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className={`flex flex-col items-center justify-center gap-10`}>
+                                <div className={`text-md font-semibold`}>نختار لك الأفضل بمكوناتنا المميزة ❤️</div>
+                                <button className={`text-neutral bg-dark text-base font-semibold py-2 px-10 rounded-md cursor-pointer
+                                                      hover:text-dark hover:bg-neutral border-5 hover:border-dark transition-all ease-in-out duration-150`}
+                                >تصفح المعرض</button>
                             </div>
                         </div>
                     </section>
 
                     {/* Online courses section */}
-                    <section className={`section`}>
+                    <section className={`section flex-col items-start gap-5 bg-background`}>
                         {/* Header */}
-                        <div>
-                            {/* Description */}
-                            <div>
-                                دورات تدريبية مسجلة بجودة 4K مع إشراف مباشر وتطبيقات خطوة بخطوة تضمن نقلك من الهواية إلى الاحتراف التجاري.
-                            </div>
-                            <div>
+                        <div className={`w-full flex justify-between items-start`}>
+                            <div className={`flex flex-col gap-5`}>
                                 {/* Tagline */}
-                                <div>
+                                <div className={`tagline`}>
                                     أكاديمية سوسن كيك
                                 </div>
                                 {/* Title */}
-                                <div>
+                                <div className={`title`}>
                                     احترفي فنون الكيك من منزلك
                                 </div>
                             </div>
+                            {/* Description */}
+                            <div className={`text-base text-gray-500 max-w-120`}>
+                                دورات تدريبية مسجلة بجودة 4K مع إشراف مباشر وتطبيقات خطوة بخطوة تضمن نقلك من الهواية إلى الاحتراف التجاري.
+                            </div>
                         </div>
                         {/* Cards container */}
-                        <div>
-                            <div>
-                                card
+                        <div className={`w-full flex items-start gap-10 `}>
+                            {/*Right*/}
+                            <div className={`w-1/2 flex flex-col gap-10 bg-neutral rounded-sm p-10`}>
+                              <div className={`flex flex-col gap-10`}>
+                                  {/* Trailer */}
+                                  <div className={`bg-red-500 w-full h-80 rounded-sm flex items-center justify-center`}>
+                                      <div className={`bg-neutral text-black p-5 rounded-full border border-black`}>
+                                        <Play size={24} />
+                                      </div>
+                                  </div>
+                                  {/* Header */}
+                                  <div className={`flex flex-col gap-2 max-w-120`}>
+                                      {/* Title */}
+                                      <div className={`text-lg font-semibold `}>
+                                          دبلوم تصميم وتزيين كيك المناسبات الشامل
+                                      </div>
+                                      {/* Description */}
+                                      <div className={`text-base text-gray-500`}>
+                                          من تحضير الكيك الإسفنجي المحكم وكريمات الحشو المقاومة للحرارة، إلى النحت ثلاثي الأبعاد وتقنيات الألوان الحديثة.
+                                      </div>
+                                  </div>
+                              </div>
+                                {/* Info */}
+                                <div className={`flex flex-col gap-3`}>
+                                    <div className={`flex items-center gap-2 text-sm text-gray-500 font-bold`}>
+                                        <Check size={20} />
+                                        <div>
+                                            وصول غير محدود مدى الحياة لكافة التحديثات
+                                        </div>
+                                    </div>
+                                    <div className={`flex items-center gap-2 text-sm text-gray-500 font-bold`}>
+                                        <Check size={20} />
+                                        <div>
+                                            وصول غير محدود مدى الحياة لكافة التحديثات
+                                        </div>
+                                    </div>
+                                    <div className={`flex items-center gap-2 text-sm text-gray-500 font-bold`}>
+                                        <Check size={20} />
+                                        <div>
+                                            وصول غير محدود مدى الحياة لكافة التحديثات
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* free label */}
+                                <a href={`https://www.youtube.com/@SawsanQdaisat`} className={`w-fit flex items-center justify-end`}>
+                                    <div className={`text-sm font-bold text-green-600`}>مجانا على </div>
+                                    <div className={`w-20`}>
+                                        <img src={youtubeLogo} alt="youtube"/>
+                                    </div>
+                                </a>
+                            </div>
+                            {/*Left*/}
+                            <div className={`w-1/2 flex flex-col gap-5 bg-neutral rounded-sm p-10`}>
+                                {/* YouTube Channel */}
+                                <div className={`relative w-full h-80`}>
+                                    <img
+                                        src={youtube}
+                                        alt="banner"
+                                        className={`w-full h-full object-cover object-center rounded-sm`}
+                                    />
+                                    {/* Avatar */}
+                                    <div className={`absolute w-10 h-10`}>
+                                        <img
+                                            src={avatar}
+                                            alt="avatar"
+                                            className={`w-full h-full object-cover object-center rounded-full`}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>

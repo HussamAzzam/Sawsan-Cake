@@ -13,5 +13,36 @@ import strawberry from "/icons/strawberry.png"
 import mango from "/icons/mango.png"
 import pineapple from "/icons/pineapple.png"
 import quality from "/icons/quality.png"
-
-export { mobilePoster, category, walnut, cake2, cashew, almond, mango, cake3, cake1, pineapple, cake4, pastryBag, cakeSample, strawberry, quality }
+import whatsapp from "/icons/whats-app.png"
+import instagram from "/icons/instagram.png"
+import facebook from "/icons/facebook.png"
+import truck from "/icons/truck.png"
+import contact from "/icons/contact.png"
+import youtubeLogo from "/icons/youtube-logo.png"
+import youtube from "/design/channel-cover.jpg"
+import avatar from "/design/channel-avatar.jpeg"
+export {
+        mobilePoster,
+        category,
+        walnut,
+        cake2,
+        cashew,
+        almond,
+        mango,
+        cake3,
+        cake1,
+        pineapple,
+        cake4,
+        pastryBag,
+        cakeSample,
+        strawberry,
+        quality,
+        whatsapp,
+        instagram,
+        facebook,
+        truck,
+        contact,
+        youtube,
+        avatar,
+        youtubeLogo
+}

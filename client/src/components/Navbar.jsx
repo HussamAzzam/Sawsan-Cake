@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const { user, loginWithGoogle, logout } = useAuth();
