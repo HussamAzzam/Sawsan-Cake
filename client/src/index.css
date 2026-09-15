@@ -9,10 +9,10 @@
     --color-secondary-light: #FFEEDF;
     --color-secondary-bg: rgb(255 238 223 / 0.5);
     --color-tertiary: #8C3B4A;
-    --color-neutral: #FFF9F6;
+    --color-neutral: #FFFFFF;
     --color-black: #000000;
     --color-gray: #F5F0ED;
-    --color-background: #f8f2ef;
+    --color-background: #FEF8F5;
 
 
     /*Font families*/
@@ -51,6 +51,7 @@
     /* Spacing */
     --spacing-base: 4rem;
     --spacing-section: 10rem;
+    --spacing-nav: 6rem;
 }
 
 @layer components {
@@ -60,13 +61,16 @@
         shadow-sm transition-colors cursor-pointer
     }
     .section {
-        @apply w-full flex items-center justify-between bg-neutral px-[10%] py-30
+        @apply w-[80%] min-h-screen flex items-center justify-between bg-background py-nav
     }
     .tagline {
         @apply w-fit text-sm bg-light text-dark py-1 px-5 rounded-md
     }
     .title {
         @apply font-bold text-xl
+    }
+    .description {
+        @apply text-sm text-gray-500
     }
 }
 

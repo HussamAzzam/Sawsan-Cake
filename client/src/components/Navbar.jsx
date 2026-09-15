@@ -28,10 +28,12 @@ export default function Navbar() {
     }`;
 
   return (
-    <nav className={`fixed top-0 left-0 w-full font-body transition-all ease-in-out duration-300  z-100
-                     ${ isScrolled ? "bg-primary" : "bg-transparent " }
+    <nav className={`fixed top-2 left-1/2 -translate-x-1/2 w-[80%] flex items-center justify-between
+                     font-body transition-all ease-in-out duration-300  z-100
+                     ${ isScrolled ? "bg-primary shadow-md" : "bg-transparent " } 
+                     rounded-md 
           `}>
-      <div className=" px-4 sm:px-6 lg:px-base w-full">
+      <div className=" px-4 sm:px-6 lg:px-5 w-full">
         <div className="relative flex h-16 w-full">
           {/* Mobile version */}
           <div className={`md:hidden flex flex-row-reverse w-full items-center justify-between `}>
