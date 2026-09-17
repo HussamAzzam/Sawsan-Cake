@@ -1,22 +1,25 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { usePanel } from "@/context/PanelContext";
 
 export default function Navbar() {
   const { user, loginWithGoogle, logout } = useAuth();
   const { activeIndex } = usePanel();
+  const location = useLocation();
 
-  const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const isScrolled = activeIndex > 0;
+  const isHomePage = location.pathname === "/";
+
+  // Only use scroll-based logic on the home page; everywhere else, always primary
+  const isScrolled = isHomePage ? activeIndex > 0 : true;
 
   const navLinkStyle = ({ isActive }) =>
-      `px-3 py-2 rounded-md text-base font-medium transition-colors ${
+      `px-3 py-2 rounded-md text-base transition-colors transition-all ease-in-out duration-100 ${
           isActive
-              ? "text-primary font-semibold"
-              : "text-neutral hover:text-primary hover:bg-pink-50"
+              ? "active"
+              : "font-medium  text-neutral hover:text-primary hover:bg-pink-50"
       }`;
 
   return (
@@ -97,13 +100,12 @@ export default function Navbar() {
                       </button>
                     </div>
                 ) : (
-                    <button
-                        onClick={loginWithGoogle}
-                        type="button"
+                    <Link
+                        to="/login"
                         className="btn"
                     >
                       سجل الان
-                    </button>
+                    </Link>
                 )}
               </div>
             </div>
@@ -119,62 +121,13 @@ export default function Navbar() {
                   <span>سوسن كيك</span>
                 </Link>
 
-                <div className={`flex items-center  gap-10 text-sm `}>
+                <div className={`flex items-center gap-10 text-sm`}>
                   <NavLink to="/menu" className={navLinkStyle}>
                     القائمة
                   </NavLink>
-
-                  {/* Courses Dropdown */}
-                  <div
-                      className="relative "
-                      onMouseEnter={() => setIsCoursesOpen(true)}
-                      onMouseLeave={() => setIsCoursesOpen(false)}
-                  >
-                    <NavLink to="/courses" className={navLinkStyle}>
-                  <span className="inline-flex items-center gap-1">
-                    الدورات
-                    <svg
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                            isCoursesOpen ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                      <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </span>
-                    </NavLink>
-
-                    {isCoursesOpen && (
-                        <div
-                            dir="rtl"
-                            className="absolute right-0 mt-3 w-44 rounded-sm shadow-lg bg-white ring-1 ring-black/5 py-1 z-50 text-right"
-                        >
-
-                          <Link
-                              to="/courses/in-person"
-                              className="block px-4 py-2 text-sm text-black hover:text-pink-600"
-                              onClick={() => setIsCoursesOpen(false)}
-                          >
-                            دورات حضورية
-                          </Link>
-                          <Link
-                              to="/courses/online"
-                              className="block px-4 py-2 text-sm text-black hover:text-pink-600"
-                              onClick={() => setIsCoursesOpen(false)}
-                          >
-                            دورات اونلاين
-                          </Link>
-                        </div>
-                    )}
-                  </div>
-
+                  <NavLink to="/gallery" className={navLinkStyle}>
+                    المعرض
+                  </NavLink>
                   <NavLink to="/about-us" className={navLinkStyle}>
                     من نحن
                   </NavLink>
@@ -206,13 +159,13 @@ export default function Navbar() {
                         </button>
                       </div>
                   ) : (
-                      <button
-                          onClick={loginWithGoogle}
+                      <Link
+                          to={`/login`}
                           type="button"
                           className="btn"
                       >
                         سجل الان
-                      </button>
+                      </Link>
                   )}
                 </div>
               </div>
@@ -242,7 +195,7 @@ export default function Navbar() {
                 القائمة
               </NavLink>
               <NavLink
-                  to="/courses"
+                  to="/gallery"
                   className={({ isActive }) =>
                       `block px-3 py-2 rounded-md text-base font-medium text-right transition-colors ${
                           isActive
@@ -252,24 +205,8 @@ export default function Navbar() {
                   }
                   onClick={() => setIsMobileMenuOpen(false)}
               >
-                الدورات
+                المعرض
               </NavLink>
-              <div className="pr-4 space-y-1">
-                <Link
-                    to="/courses/in-person"
-                    className="block px-3 py-1.5 text-sm text-gray-600 hover:text-pink-600 text-right transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  الدورات الحضورية
-                </Link>
-                <Link
-                    to="/courses/online"
-                    className="block px-3 py-1.5 text-sm text-gray-600 hover:text-pink-600 text-right transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  دورات الاونلاين
-                </Link>
-              </div>
               <NavLink
                   to="/about-us"
                   className={({ isActive }) =>

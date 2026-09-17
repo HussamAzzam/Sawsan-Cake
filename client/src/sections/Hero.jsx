@@ -1,6 +1,9 @@
 import GalleryButton from "@/components/CoolButton.jsx";
 
+import { useNavigate } from "react-router-dom"
+
 const Hero = ({mobilePoster, posterUrl, videoUrl, onVideoReady}) => {
+    const navigate = useNavigate();
     return (
     <section className=" relative h-screen w-full overflow-hidden">
         {/* Mobile hero image */}
@@ -38,13 +41,18 @@ const Hero = ({mobilePoster, posterUrl, videoUrl, onVideoReady}) => {
                 <div className={`font-heading text-neutral text-4xl flex flex-col items-center justify-center gap-5`}>
                     <span>حلويات</span> بتفرح الألب
                 </div>
-                <GalleryButton link={`#`} text={`القائمة`} showTail={false}/>
+                <GalleryButton
+                    link={`/menu`}
+                    text={`القائمة`}
+                />
             </div>
             <div className={`flex flex-col items-center justify-center gap-10`}>
                 <div className={`font-heading text-neutral text-4xl flex flex-col items-center justify-center gap-5`}>
                     من المطبخ <span>للبيت</span>
                 </div>
-                <GalleryButton link={`#`} text={`المعرض`}/>
+                <GalleryButton
+                    link={`/gallery`}
+                    text={`المعرض`}/>
             </div>
         </div>
     </section>
