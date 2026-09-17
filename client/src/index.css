@@ -54,6 +54,12 @@
     --spacing-nav: 6rem;
 }
 
+html {
+    background-color: var(--color-background);
+}
+body {
+    background-color: var(--color-background);
+}
 @layer components {
     .btn {
         @apply inline-flex items-center justify-center text-sm sm:text-sm font-bold px-3.5 py-1.5 rounded-md
@@ -72,6 +78,8 @@
     .description {
         @apply text-sm text-gray-500
     }
+
+
 }
 
 

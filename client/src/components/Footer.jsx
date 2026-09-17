@@ -1,55 +1,111 @@
 import { Link } from "react-router-dom";
+import { ArrowUp, Mail, Phone, MapPin } from "lucide-react";
+import { SiYoutube, SiFacebook, SiInstagram } from "react-icons/si";
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left">
-          {/* Brand info */}
-          <div>
-            <Link
-              to="/"
-              className="inline-flex items-center space-x-2 text-lg font-bold text-pink-600 hover:text-pink-700 transition-colors"
-            >
-              <span>🍰</span>
-              <span>Sawsan Cake</span>
-            </Link>
-            <p className="mt-2 text-sm text-gray-500 max-w-xs mx-auto md:mx-0">
-              Freshly baked custom cakes, delightful desserts, and professional baking courses.
-            </p>
+      <footer className="w-full h-screen flex flex-col justify-end bg-dark text-neutral px-10 py-16 gap-16 relative overflow-hidden">
+        {/* Top - Links */}
+        <div className={`w-full flex items-start justify-between text-lg font-semibold`}>
+          {/* Right */}
+          <div className={`flex items-start gap-20`}>
+            {/* Quick links */}
+            <div className={`flex flex-col gap-4`}>
+              <a href="" className={`text-neutral font-bold hover:text-neutral transition-all ease-in-out duration-100`}>
+                الرئيسية
+              </a>
+              <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                القائمة
+              </a>
+              <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                المعرض
+              </a>
+              <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                من نحن
+              </a>
+              <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                تواصل معنا
+              </a>
+            </div>
+
+            {/* Login */}
+            <div className={`flex flex-col gap-4`}>
+              <a className={`text-neutral/50 font-bold hover:text-neutral transition-all ease-in-out duration-100 cursor-pointer`}>
+                تسجيل الدخول
+              </a>
+              <a className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100 cursor-pointer`}>
+                إنشاء حساب
+              </a>
+            </div>
           </div>
 
-          {/* Quick links */}
-          <div className="flex flex-wrap justify-center md:justify-center gap-x-6 gap-y-2 text-sm text-gray-600">
-            <Link to="/" className="hover:text-pink-600 transition-colors">
-              Home
-            </Link>
-            <Link to="/menu" className="hover:text-pink-600 transition-colors">
-              Menu
-            </Link>
-            <Link to="/courses" className="hover:text-pink-600 transition-colors">
-              Courses
-            </Link>
-            <Link to="/about-us" className="hover:text-pink-600 transition-colors">
-              About Us
-            </Link>
-            <Link to="/contact-us" className="hover:text-pink-600 transition-colors">
-              Contact Us
-            </Link>
-          </div>
+          {/* Left */}
+          <div className={`flex gap-20`}>
+            {/* Contact */}
+            <div className={`flex flex-col gap-4`}>
+              <a href="mailto:sawsancake@gmail.com" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <Mail size={18} />
+                sawsancake@gmail.com
+              </a>
+              <a href="tel:+962000000000" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <Phone size={18} />
+                +962 xxx xxx xxx
+              </a>
+              <div className={`flex items-center gap-2 text-neutral/50`} dir={`ltr`}>
+                <MapPin size={18} />
+                Jordan, Irbid
+              </div>
+            </div>
 
-          {/* Copyright & Admin Link */}
-          <div className="text-sm text-gray-400 md:text-right">
-            <p>&copy; {new Date().getFullYear()} Sawsan Cake. All rights reserved.</p>
-            <Link
-              to="/admin"
-              className="mt-1 inline-block text-xs text-gray-400 hover:text-pink-600 transition-colors"
-            >
-              Admin Portal
-            </Link>
+            {/* Socials */}
+            <div className={`flex flex-col gap-4`}>
+              <a href="" className={`flex items-center gap-2 text-neutral/50 font-bold hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <SiYoutube size={18} />
+                YouTube
+              </a>
+              <a href="" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <SiFacebook size={18} />
+                Facebook
+              </a>
+              <a href="" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <SiInstagram size={18} />
+                Instagram
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </footer>
+
+        {/* Bottom - Watermark logo */}
+        <div className={`relative w-full flex items-center justify-center py-10`}>
+          <div className={`text-[15rem] font-bold text-neutral leading-none select-none`}>
+            سوسن كيك
+          </div>
+        </div>
+
+        {/* Legal row */}
+        <div className={`w-full flex items-center justify-between text-sm text-neutral/40 border-t border-neutral/10 pt-6`}>
+          <span>© 2026 سوسن كيك. جميع الحقوق محفوظة</span>
+          <div className={`flex items-center gap-6`}>
+            <a href="" className={`hover:text-neutral transition-all ease-in-out duration-100`}>الشروط والأحكام</a>
+            <a href="" className={`hover:text-neutral transition-all ease-in-out duration-100`}>سياسة الخصوصية</a>
+          </div>
+        </div>
+
+        {/* Scroll to top - fixed, floating over the footer */}
+        <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className={`absolute w-30 h-30 left-10 bottom-60 z-50 flex items-center justify-center bg-primary text-neutral p-5 rounded-full cursor-pointer
+                    transition-all ease-in-out duration-100 hover:text-neutral hover:bg-transparent border-4 border-primary shadow-md`}
+        >
+          <ArrowUp size={40} />
+        </button>
+        <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className={`absolute w-30 h-30 right-10 bottom-60 z-50 flex items-center justify-center bg-primary text-neutral p-5 rounded-full cursor-pointer
+                    transition-all ease-in-out duration-100 hover:text-neutral hover:bg-transparent border-4 border-primary shadow-md`}
+        >
+          <ArrowUp size={40} />
+        </button>
+      </footer>
   );
 }

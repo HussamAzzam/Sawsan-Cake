@@ -64,12 +64,15 @@ export default function Home() {
                     />
                 </ErrorBoundary>
 
-                <ErrorBoundary level={`section`}>
+                <ErrorBoundary level={`section`} variant={`app`}>
                     <CategorySection />
                 </ErrorBoundary>
 
                 <ErrorBoundary level={`section`} variant={`app`}>
                     <OnlineCoursesSection />
+                </ErrorBoundary>
+                <ErrorBoundary level={`section`} variant={`app`}>
+                    <InPersonCoursesSection />
                 </ErrorBoundary>
             </div>
         </main>

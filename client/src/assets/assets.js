@@ -21,6 +21,7 @@ import contact from "/icons/contact.png"
 import youtubeLogo from "/icons/youtube-logo.png"
 import youtube from "/design/channel-cover.jpg"
 import avatar from "/design/channel-avatar.jpeg"
+import courseImage from "/design/course.jpeg"
 export {
         mobilePoster,
         category,
@@ -44,5 +45,6 @@ export {
         contact,
         youtube,
         avatar,
-        youtubeLogo
+        youtubeLogo,
+        courseImage,
 }
