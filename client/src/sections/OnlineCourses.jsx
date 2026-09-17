@@ -25,7 +25,7 @@ const OnlineCourses = () => {
         {/* Cards container */}
         <div className={`w-full h-full flex-1 flex items-start gap-10 `}>
            {/* Video container */}
-            <div className={`w-[60%] aspect-video bg-gray rounded-sm flex items-center justify-center`}>
+            <div className={`w-[60%] h-full bg-gray rounded-sm flex items-center justify-center`}>
                 <div className={`p-5 rounded-full bg-dark cursor-pointer`}>
                     <Play
                         size={40}
@@ -35,7 +35,7 @@ const OnlineCourses = () => {
             </div>
 
             {/* Channel Info */}
-            <div className={`w-[40%] h-full flex flex-col justify-between gap-10`}>
+            <div className={`w-[40%] h-full flex flex-col gap-10`}>
                 <div className={`bg-white rounded-sm shadow-md flex p-5 items-center justify-between gap-2`}>
                     <div className={`flex items-center justify-center gap-5`}>
                         <span className={`w-20 rounded-full`}>

@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import { ArrowUp, Mail, Phone, MapPin } from "lucide-react";
 import { SiYoutube, SiFacebook, SiInstagram } from "react-icons/si";
+import { usePanel } from "@/context/PanelContext.jsx"
 
 export default function Footer() {
+
+  const { setActiveIndex } = usePanel();
+
+  const scrollToTop = () => {
+    setActiveIndex(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
       <footer className="w-full h-screen flex flex-col justify-end bg-dark text-neutral px-10 py-16 gap-16 relative overflow-hidden">
         {/* Top - Links */}
@@ -93,14 +101,14 @@ export default function Footer() {
 
         {/* Scroll to top - fixed, floating over the footer */}
         <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() => scrollToTop()}
             className={`absolute w-30 h-30 left-10 bottom-60 z-50 flex items-center justify-center bg-primary text-neutral p-5 rounded-full cursor-pointer
                     transition-all ease-in-out duration-100 hover:text-neutral hover:bg-transparent border-4 border-primary shadow-md`}
         >
           <ArrowUp size={40} />
         </button>
         <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() => scrollToTop()}
             className={`absolute w-30 h-30 right-10 bottom-60 z-50 flex items-center justify-center bg-primary text-neutral p-5 rounded-full cursor-pointer
                     transition-all ease-in-out duration-100 hover:text-neutral hover:bg-transparent border-4 border-primary shadow-md`}
         >
