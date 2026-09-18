@@ -1,4 +1,21 @@
-import {Check, Play} from "lucide-react";
+import {Check, Play, Sparkles, Info} from "lucide-react";
+import { category, truck, contact, whatsapp, instagram, facebook } from "@/assets/assets.js"
+import pastryBag from "/icons/pastry-bag.png";
+import cake1 from "/icons/cake1.png";
+import cake2 from "/icons/cake2.png";
+import cake3 from "/icons/cake3.png";
+import cake4 from "/icons/cake4.png";
+import cashew from "/icons/cashew.png";
+import coconut from "/icons/coconut.png";
+import Hazelnut from "/icons/Hazelnut.png";
+import pistachio from "/icons/pistachio.png";
+import almond from "/icons/almond.png";
+import pineapple from "/icons/pineapple.png";
+import strawberry from "/icons/strawberry.png";
+import mango from "/icons/mango.png";
+import fruitsMix from "/icons/fruits-mix.png";
+
+
 
 const Menu = () => {
     return (
@@ -7,11 +24,11 @@ const Menu = () => {
         <div className={`flex flex-col items-center justify-center gap-5`}>
             {/* Tagline */}
             <div className={`tagline `}>
-                قائمة المني كيك
+                حلوياتنا تكفي و تزيد
             </div>
             {/* Title */}
             <div className={`title`}>
-                حلوياتنا تكفي و تزيد
+                قائمة المني كيك
             </div>
             {/* Description */}
             <div className={`text-sm text-gray-500`}>
@@ -47,7 +64,7 @@ const Menu = () => {
                 </div>
                 {/* Items container */}
                 <div className={`flex flex-col gap-5`}>
-                    <div className={`flex items-start justify-between bg-secondary-light py-5 px-10 rounded-sm`}>
+                    <div className={`flex items-start justify-between bg-secondary-light py-10 px-10 rounded-sm`}>
                         <div className={`flex items-center gap-5`}>
                             {/* Icon */}
                             <div className={`flex items-center justify-center`}>
@@ -76,7 +93,7 @@ const Menu = () => {
                             <div className={`text-sm text-gray-500`}>حسب التزيين</div>
                         </div>
                     </div>
-                    <div className={`flex items-start justify-between bg-secondary-light py-5 px-10 rounded-sm`}>
+                    <div className={`flex items-start justify-between bg-secondary-light py-10 px-10 rounded-sm`}>
                         <div className={`flex items-center gap-5`}>
                             <div className={`flex items-center justify-center`}>
                                 <img
@@ -105,7 +122,7 @@ const Menu = () => {
                         </div>
                     </div>
                     {/* Most popular */}
-                    <div className={`relative flex items-start justify-between bg-secondary-light py-5 px-10 rounded-sm
+                    <div className={`relative flex items-start justify-between bg-secondary-light py-10 px-10 rounded-sm
                                                      border-5 border-dark 
                                                      `}>
                         <div className={`flex items-center gap-5`}>
@@ -142,7 +159,7 @@ const Menu = () => {
                             <div className={`text-sm text-gray-500`}>حسب التزيين</div>
                         </div>
                     </div>
-                    <div className={`flex items-start justify-between bg-secondary-light py-5 px-10 rounded-sm`}>
+                    <div className={`flex items-start justify-between bg-secondary-light py-10 px-10 rounded-sm`}>
                         <div className={`flex items-center gap-5`}>
                             <div className={`flex items-center justify-center`}>
                                 <img
@@ -271,6 +288,16 @@ const Menu = () => {
                             </div>
                             <div className={`text-base font-semibold`}>أناناس</div>
                         </div>
+                        <div className={`flex items-center gap-2 bg-[#F5A623]/60 py-1 px-2 rounded-sm`}>
+                            <div className={`w-5 h-5  rounded-full`}>
+                                <img
+                                    src={fruitsMix}
+                                    alt="cake2"
+                                    className={`w-10`}
+                                />
+                            </div>
+                            <div className={`text-base font-semibold`}>فواكه مشكلة</div>
+                        </div>
                     </div>
                 </div>
                 {/* Others */}
@@ -287,15 +314,15 @@ const Menu = () => {
                             </div>
                             <div className={`text-base font-semibold`}>لوز</div>
                         </div>
-                        <div className={`flex items-center gap-2 bg-[#E8D2A6] py-1 px-2 rounded-sm`}>
+                        <div className={`flex items-center gap-2 bg-[#D9B88F] py-1 px-2 rounded-sm`}>
                             <div className={`w-5 h-5  rounded-full`}>
                                 <img
-                                    src={walnut}
+                                    src={Hazelnut}
                                     alt="cake2"
                                     className={`w-10`}
                                 />
                             </div>
-                            <div className={`text-base font-semibold`}>جوز</div>
+                            <div className={`text-base font-semibold`}>بندق</div>
                         </div>
 
                         <div className={`flex items-center gap-2 bg-[#F0DFC0] py-1 px-2 rounded-sm`}>
@@ -307,6 +334,28 @@ const Menu = () => {
                                 />
                             </div>
                             <div className={`text-base font-semibold`}>كاجو</div>
+                        </div>
+
+                        <div className={`flex items-center gap-2 bg-[#D9E8B8] py-1 px-2 rounded-sm`}>
+                            <div className={`w-5 h-5  rounded-full`}>
+                                <img
+                                    src={pistachio}
+                                    alt="cake2"
+                                    className={`w-10`}
+                                />
+                            </div>
+                            <div className={`text-base font-semibold`}>فستق حلبي</div>
+                        </div>
+
+                        <div className={`flex items-center gap-2 bg-[#F5F5EE] py-1 px-2 rounded-sm`}>
+                            <div className={`w-5 h-5  rounded-full`}>
+                                <img
+                                    src={coconut}
+                                    alt="cake2"
+                                    className={`w-10`}
+                                />
+                            </div>
+                            <div className={`text-base font-semibold`}>جوز الهند</div>
                         </div>
                     </div>
                 </div>

@@ -122,6 +122,9 @@ export default function Navbar() {
                 </Link>
 
                 <div className={`flex items-center gap-10 text-sm`}>
+                  <NavLink to="/" className={navLinkStyle}>
+                    الرئيسية
+                  </NavLink>
                   <NavLink to="/menu" className={navLinkStyle}>
                     القائمة
                   </NavLink>

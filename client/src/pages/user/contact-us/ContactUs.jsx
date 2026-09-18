@@ -100,7 +100,7 @@ export default function ContactUs() {
         <div dir="rtl" className="min-h-screen bg-background font-body text-dark pt-nav">
             {/* ---------------- Hero ---------------- */}
             <section className="mx-auto max-w-7xl px-6 pt-14">
-                <div className="flex flex-col items-center text-right">
+                <div className="flex flex-col items-center text-center">
           <span className="mb-6 inline-flex items-center justify-center gap-2 rounded-md bg-light px-4 py-1.5 text-sm text-dark">
             <Heart size={14} className="fill-dark/20" />
             بوابة الاستفسار والطلبات المخصصة
@@ -125,16 +125,16 @@ export default function ContactUs() {
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.55fr_1fr]">
                     {/* ---- Form card ---- */}
                     <div className="order-1 rounded-3xl bg-neutral p-8 shadow-md lg:order-none">
-                        <div className="mb-8 flex items-center justify-end gap-3">
+                        <div className="mb-8 flex items-center gap-3">
+                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-light text-primary">
+                                <PenLine size={20} />
+                            </span>
                             <div className="text-right">
                                 <p className="text-xs font-semibold text-primary">الخدمة الملكية</p>
                                 <h2 className="font-heading text-xl text-dark sm:text-2xl">
                                     طلب تصميم أو حجز استشارة نكهات
                                 </h2>
                             </div>
-                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-light text-primary">
-                <PenLine size={20} />
-              </span>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -219,32 +219,34 @@ export default function ContactUs() {
                 />
                             </Field>
 
-                            <p className="flex items-center justify-end gap-2 text-xs text-gray-400">
-                                نضمن خصوصية بياناتكم وسرية تفاصيل المناسبات الملكية والخاصة تماماً.
-                                <ShieldCheck size={14} />
+                            <p className="flex items-center gap-2 text-xs text-gray-400">
+                                <ShieldCheck size={14} className="text-primary shrink-0" />
+                                <span>نضمن خصوصية بياناتكم وسرية تفاصيل المناسبات الملكية والخاصة تماماً.</span>
                             </p>
 
                             <button
                                 type="submit"
-                                className="flex w-full items-center justify-center gap-2 rounded-xl bg-tertiary py-4 text-sm font-bold text-neutral shadow-sm transition-colors hover:bg-dark sm:text-base"
+                                className="flex w-full items-center justify-center gap-2 rounded-xl bg-tertiary py-4 text-sm font-bold text-neutral shadow-sm transition-colors hover:bg-dark sm:text-base cursor-pointer"
                             >
-                                إرسال الاستفسار وحجز موعد النواقصة
+                                <span>إرسال الاستفسار وحجز موعد المناقشة</span>
                                 <ArrowLeft size={16} />
                             </button>
 
-                            <div className="flex items-center justify-between rounded-2xl bg-secondary-bg px-5 py-4">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral text-primary">
-                  <Truck size={16} />
-                </span>
-                                <div className="text-right">
-                                    <p className="text-sm font-semibold text-dark">جاهزية التوصيل الفاخر</p>
-                                    <p className="text-xs text-gray-500">
-                                        مركبات مبردة ومجهزة بدقة للمحافظة على قوام الكيك
-                                    </p>
+                            <div className="flex items-center justify-between gap-4 rounded-2xl bg-secondary-bg px-5 py-4">
+                                <div className="flex items-center gap-3">
+                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral text-primary">
+                                        <Truck size={16} />
+                                    </span>
+                                    <div className="text-right">
+                                        <p className="text-sm font-semibold text-dark">جاهزية التوصيل الفاخر</p>
+                                        <p className="text-xs text-gray-500">
+                                            مركبات مبردة ومجهزة بدقة للمحافظة على قوام الكيك
+                                        </p>
+                                    </div>
                                 </div>
-                                <span className="rounded-md bg-neutral px-3 py-1 text-xs font-semibold text-tertiary">
-                  ضمان وصول بنسبة ١٠٠٪
-                </span>
+                                <span className="shrink-0 rounded-md bg-neutral px-3 py-1 text-xs font-semibold text-tertiary">
+                                    ضمان وصول بنسبة ١٠٠٪
+                                </span>
                             </div>
                         </form>
                     </div>
@@ -252,9 +254,9 @@ export default function ContactUs() {
                     {/* ---- Sidebar ---- */}
                     <div className="order-2 space-y-6 lg:order-none">
                         <div className="rounded-2xl bg-neutral p-5 shadow-sm">
-                            <p className="flex items-center justify-end gap-2 font-semibold text-dark">
-                                استجابة استثنائية
-                                <Clock size={16} className="text-primary" />
+                            <p className="flex items-center gap-2 font-semibold text-dark">
+                                <Clock size={16} className="text-primary shrink-0" />
+                                <span>استجابة استثنائية</span>
                             </p>
                             <p className="mt-2 text-right text-xs leading-6 text-gray-500">
                                 متوسط وقت الرد لفريق الضيافة:{" "}
@@ -263,10 +265,10 @@ export default function ContactUs() {
                             </p>
                         </div>
 
-                        <button className="flex w-full items-center justify-between gap-3 rounded-2xl bg-[#22c35e] px-5 py-4 text-neutral shadow-sm transition-colors hover:brightness-105">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                <MessageCircle size={16} />
-              </span>
+                        <button className="flex w-full items-center gap-3 rounded-2xl bg-[#22c35e] px-5 py-4 text-neutral shadow-sm transition-colors hover:brightness-105 cursor-pointer">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20">
+                                <MessageCircle size={16} />
+                            </span>
                             <div className="text-right">
                                 <p className="text-sm font-bold">تواصل فوري عبر واتساب</p>
                                 <p className="text-xs opacity-90">محادثة مباشرة مع شيف البوتيك ومستشاري المناسبات</p>
@@ -276,34 +278,34 @@ export default function ContactUs() {
                         <div className="space-y-4">
                             {branches.map((b) => (
                                 <div key={b.name} className="rounded-2xl bg-neutral p-5 shadow-sm">
-                                    <div className="mb-2 flex items-center justify-end gap-2">
+                                    <div className="mb-2 flex items-center justify-between gap-2">
                                         <h3 className="font-heading text-base text-dark">{b.name}</h3>
                                         <span className={`rounded-md px-2.5 py-1 text-[0.65rem] font-semibold ${b.badgeClass}`}>
-                      {b.badge}
-                    </span>
+                                            {b.badge}
+                                        </span>
                                     </div>
-                                    <p className="flex items-start justify-end gap-2 text-right text-xs leading-6 text-gray-500">
-                                        {b.address}
+                                    <p className="flex items-start gap-2 text-right text-xs leading-6 text-gray-500">
                                         <MapPin size={14} className="mt-0.5 shrink-0 text-gray-400" />
+                                        <span>{b.address}</span>
                                     </p>
-                                    <p className="mt-2 flex items-center justify-end gap-2 text-sm font-bold text-dark">
-                                        {b.phone}
-                                        <Phone size={14} className="text-primary" />
+                                    <p className="mt-2 flex items-center gap-2 text-sm font-bold text-dark">
+                                        <Phone size={14} className="text-primary shrink-0" />
+                                        <span dir="ltr">{b.phone}</span>
                                     </p>
-                                    <p className="mt-2 flex items-center justify-end gap-2 text-xs text-gray-500">
-                                        {b.hours}
-                                        <Clock size={14} className="text-gray-400" />
+                                    <p className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                        <Clock size={14} className="text-gray-400 shrink-0" />
+                                        <span>{b.hours}</span>
                                     </p>
                                 </div>
                             ))}
                         </div>
 
                         <div className="rounded-2xl bg-neutral p-5 shadow-sm">
-                            <p className="mb-3 flex items-center justify-end gap-2 text-sm font-semibold text-dark">
-                                موقع الفروع وسهولة الاستلام
+                            <p className="mb-3 flex items-center justify-between gap-2 text-sm font-semibold text-dark">
+                                <span>موقع الفروع وسهولة الاستلام</span>
                                 <span className="rounded-md bg-light px-2 py-0.5 text-[0.6rem] font-semibold text-dark">
-                  خدمة استلام الكيك بالسيارة
-                </span>
+                                    خدمة استلام الكيك بالسيارة
+                                </span>
                             </p>
                             <div className="h-40 w-full overflow-hidden rounded-xl">
                                 <iframe
@@ -325,8 +327,8 @@ export default function ContactUs() {
                                         key={s.label}
                                         className="rounded-full border border-black/10 px-4 py-1.5 text-xs font-medium text-dark"
                                     >
-                    {s.label}
-                  </span>
+                                        {s.label}
+                                    </span>
                                 ))}
                             </div>
                         </div>
@@ -338,15 +340,15 @@ export default function ContactUs() {
                     {features.map(({ icon: Icon, title, desc }) => (
                         <div
                             key={title}
-                            className="flex items-center justify-end gap-3 rounded-2xl bg-neutral px-5 py-4 shadow-sm"
+                            className="flex items-center gap-3 rounded-2xl bg-neutral px-5 py-4 shadow-sm"
                         >
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-light text-primary">
+                                <Icon size={18} />
+                            </span>
                             <div className="text-right">
                                 <p className="text-sm font-bold text-dark">{title}</p>
                                 <p className="mt-1 text-xs leading-5 text-gray-500">{desc}</p>
                             </div>
-                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-light text-primary">
-                <Icon size={18} />
-              </span>
                         </div>
                     ))}
                 </div>
@@ -359,8 +361,8 @@ function Field({ label, hint, children }) {
     return (
         <label className="block">
             <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-xs text-gray-400">{hint}</span>
                 <span className="text-sm font-semibold text-dark">{label}</span>
+                <span className="text-xs text-gray-400">{hint}</span>
             </div>
             {children}
         </label>
