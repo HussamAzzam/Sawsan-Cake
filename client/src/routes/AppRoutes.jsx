@@ -9,6 +9,7 @@ import ContactUs from "../pages/user/contact-us/ContactUs";
 import Gallery from "../pages/user/gallery/Gallery";
 import Menu from "../pages/user/menu/Menu";
 import LoginPage from "../pages/user/login/LoginPage";
+import CategoryProducts from "../pages/user/category-products/CategoryProducts";
 
 // Admin Pages
 import Dashboard from "../pages/admin/dashboard/Dashboard";
@@ -33,6 +34,10 @@ export default function AppRoutes() {
         <Route path="/about" element={<Navigate to="/about-us" replace />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/contact" element={<Navigate to="/contact-us" replace />} />
+
+        {/* Category Products Routes*/}
+        <Route path="/category/:slug" element={<CategoryProducts />} />
+
         {/* 404 Catch-all within user layout */}
         <Route path="*" element={<NotFound />} />
       </Route>

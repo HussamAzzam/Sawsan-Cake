@@ -1,5 +1,5 @@
 // Data Sample
-import products from "@/data/productsSample.js"
+import products from "@/data/products.js"
 const Gallery = () => {
     return (
 
