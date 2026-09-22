@@ -1,92 +1,25 @@
-import { User, ShoppingBag, ArrowLeft, BadgeCheck, Truck, Flower2, Sparkles } from "lucide-react";
-
 export default function LoginPage() {
     return (
-        <div dir="rtl" className="min-h-screen bg-background font-body flex flex-col">
-            {/* Header */}
-            <header className="w-full flex items-center justify-between px-8 sm:px-16 py-6">
-                <div className="flex items-center gap-8">
-                    <button className="w-10 h-10 rounded-full bg-dark text-neutral flex items-center justify-center">
-                        <User size={18} />
-                    </button>
-                    <nav className="hidden sm:flex items-center gap-8 text-sm font-semibold text-dark">
-                        <a href="/" className="hover:text-primary transition-colors">
-                            العودة للرئيسية
-                        </a>
-                        <a href="/menu" className="hover:text-primary transition-colors">
-                            قائمة الحلويات
-                        </a>
-                    </nav>
-                </div>
+        <div dir="rtl" className="min-h-screen bg-background font-body flex items-center justify-center px-4">
+            <div className="w-full max-w-md bg-neutral rounded-[28px] shadow-md px-8 py-10 flex flex-col items-center text-center">
+                {/* Heading */}
+                <h2 className="font-heading text-xl text-tertiary mb-3">
+                    مرحباً بكِ في سوسن كيك
+                </h2>
 
-                <div className="flex items-center gap-4">
-                    <div className="text-left">
-                        <h1 className="font-heading text-2xl leading-none text-tertiary">سوسن كيك</h1>
-                        <p className="text-xs text-dark/70 mt-1">Berry &amp; Butter Artistry</p>
-                    </div>
-                    <button className="w-10 h-10 rounded-full bg-dark text-neutral flex items-center justify-center">
-                        <ShoppingBag size={16} />
-                    </button>
-                </div>
-            </header>
+                {/* Description */}
+                <p className="description text-dark/70 leading-relaxed mb-8">
+                    سجّلي دخولكِ للمتابعة وطلب أشهى قوالب الكيك.
+                </p>
 
-            {/* Main content */}
-            <main className="flex-1 flex items-center justify-center px-4">
-                <div className="w-full max-w-md bg-neutral rounded-[28px] shadow-md px-8 py-10 flex flex-col items-center text-center">
-                    {/* Icon */}
-                    <div className="w-20 h-20 rounded-full bg-light flex items-center justify-center text-3xl mb-6">
-                        🎂
-                    </div>
-
-                    {/* Badge */}
-                    <span className="tagline flex items-center gap-1.5 mb-4">
-            بوابة العملاء الحصرية
-            <BadgeCheck size={14} className="text-dark" />
-          </span>
-
-                    {/* Heading */}
-                    <h2 className="font-heading text-xl text-tertiary mb-3">
-                        مرحباً بكِ في سوسن كيك
-                    </h2>
-
-                    {/* Description */}
-                    <p className="description text-dark/70 leading-relaxed mb-8">
-                        سجّلي دخولكِ بضغطة واحدة لمتابعة أشهى طلبيات الكيك الخاصة، مناسباتكِ
-                        السعيدة، وورش فنون التزيين.
-                    </p>
-
-                    {/* Google button */}
-                    <button className="btn w-full !bg-secondary-light !text-dark hover:!text-dark hover:!bg-secondary-light border-0 gap-3 py-3">
-                        <ArrowLeft size={18} className="text-dark" />
-                        <span className="text-base font-semibold">المتابعة باستخدام Google</span>
-                        <GoogleIcon />
-                    </button>
-                </div>
-            </main>
-
-            {/* Footer feature strip */}
-            <footer className="w-full flex items-center justify-center gap-6 sm:gap-10 py-8 text-sm font-semibold text-dark">
-                <FeatureItem icon={<Flower2 size={16} className="text-primary" />} label="مكونات طبيعية فاخرة" />
-                <Dot />
-                <FeatureItem icon={<Truck size={16} className="text-primary" />} label="توصيل مبرد مخصص" />
-                <Dot />
-                <FeatureItem icon={<Sparkles size={16} className="text-primary" />} label="كيك مصنوع بحب" />
-            </footer>
+                {/* Google button */}
+                <button className="btn w-full !bg-secondary-light !text-dark hover:!text-dark hover:!bg-secondary-light border-0 gap-3 py-3">
+                    <span className="text-base font-semibold">المتابعة باستخدام Google</span>
+                    <GoogleIcon />
+                </button>
+            </div>
         </div>
     );
-}
-
-function FeatureItem({ icon, label }) {
-    return (
-        <div className="flex items-center gap-2">
-            {icon}
-            <span>{label}</span>
-        </div>
-    );
-}
-
-function Dot() {
-    return <span className="w-1 h-1 rounded-full bg-dark/30" />;
 }
 
 function GoogleIcon() {

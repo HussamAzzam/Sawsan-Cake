@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { productFilter } from "@/utils/productFilter.js";
 
 import { Search, ChevronDown } from "lucide-react"
@@ -26,6 +26,9 @@ const CategoryProducts = () => {
         }
     ,[activeSubcategory, searchText, sortOrder])
 
+    useEffect(() => {
+        setActiveSubcategory("all");
+    }, [slug]);
 
     return (
         <main className={`min-h-screen w-full py-nav flex flex-col items-center justify-start` }>

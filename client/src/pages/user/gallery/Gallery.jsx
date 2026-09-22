@@ -1,22 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Download, Heart, Share2 } from "lucide-react";
+import { ChevronDown, Download, Share2 } from "lucide-react";
 import { categories as homeCategories } from "@/data/categories.js";
-
-/**
- * Sawsan Cake — "Gallery" section
- * Hero + category filter pills + masonry image grid (CSS grid based).
- * Navbar and footer are intentionally excluded — mount this inside your
- * existing page layout.
- *
- * Built to match the shared Tailwind v4 @theme tokens (primary, light, dark,
- * secondary, tertiary, background, gray, fonts Lalezar/Changa).
- *
- * The grid uses a fine-grained `grid-auto-rows` track combined with a
- * dynamic `gridRowEnd` span computed from each image's *real* rendered
- * height once it loads. This gives a true masonry layout without ever
- * hardcoding a height/span per item — swap `src`/`alt` for admin-uploaded
- * images of any size and the layout adapts automatically.
- */
 
 const categories = [
     { id: "all", label: "الكل" },
@@ -89,9 +73,8 @@ export default function GalleryPage() {
             <section className="mx-auto max-w-5xl px-6 pt-16 text-center">
         <span className="mx-auto mb-6 inline-flex items-center gap-2 rounded-md bg-light px-4 py-1.5 text-sm text-dark">
           لقطات تأسر الحواس
-          <Heart size={14} className="fill-dark/20" />
         </span>
-                <h1 className="font-heading text-3xl text-dark sm:text-4xl">
+                <h1 className="font-heading text-3xl text-black sm:text-4xl">
                     معرض إبداعات سوسن كيك
                 </h1>
                 <p className="mt-4 text-sm leading-7 text-gray-500 sm:text-base">

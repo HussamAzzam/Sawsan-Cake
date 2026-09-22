@@ -88,10 +88,10 @@ export default function AboutUs() {
                             <Sparkles size={14} />
                             حكايتنا ونبض إبداعنا
                         </span>
-                        <h1 className="font-heading text-3xl leading-tight text-dark sm:text-4xl lg:text-[2.75rem]">
+                        <h1 className="font-heading text-3xl leading-tight text-black sm:text-4xl lg:text-[2.75rem]">
                             قصة بدأت بشغف،
                             <br />
-                            وتحولت إلى حلويات تفرّح القلب <Star size={24} className="inline text-primary" />
+                            وتحولت إلى حلويات تفرّح القلب
                         </h1>
                         <p className="mt-6 text-sm leading-8 text-gray-500 sm:text-base">
                             في عام ٢٠١٤، ومن زاوية مطبخ منزلي تفوح منه روائح الفانيليا الفرنسية وخفقات
@@ -100,7 +100,7 @@ export default function AboutUs() {
                             تحول الشغف الصادق إلى أرقى بوتيك وأكاديمية حلويات تروي حكاياتكم وتحتفل
                             بمناسباتكم بأسلوب أفخر.
                         </p>
-                        <div className="mt-8 flex flex-wrap gap-4">
+                        {/*<div className="mt-8 flex flex-wrap gap-4">
                             <button className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-neutral shadow-sm transition-colors hover:opacity-90 cursor-pointer">
                                 استكشفي المنيو الفاخر
                             </button>
@@ -112,11 +112,11 @@ export default function AboutUs() {
                         <p className="mt-6 flex items-center gap-2 text-xs text-gray-400">
                             <PartyPopper size={14} className="text-primary shrink-0" />
                             <span>أكثر من ٤٥ ألف عائلة شاركونا لحظات فرحهم</span>
-                        </p>
+                        </p>*/}
                     </div>
 
                     {/* Image */}
-                    <div className="relative order-2">
+                    {/*<div className="relative order-2">
                         <div className="overflow-hidden rounded-3xl">
                             <img
                                 src="/images/about-cake.jpg"
@@ -141,7 +141,7 @@ export default function AboutUs() {
                                 <p className="text-xs text-gray-500">كل تفصيل يُصمم خصيصاً ليناسب لحظتكم</p>
                             </div>
                         </div>
-                    </div>
+                    </div>*/}
                 </div>
             </section>
 
@@ -249,7 +249,7 @@ export default function AboutUs() {
             </section>
 
             {/* ---------------- Flavor philosophy ---------------- */}
-            <section className="mx-auto max-w-7xl px-6 py-16">
+           {/* <section className="mx-auto max-w-7xl px-6 py-16">
                 <div className="grid grid-cols-1 items-center gap-10 rounded-3xl bg-neutral p-10 shadow-sm lg:grid-cols-2">
                     <div className="order-1 text-right">
                         <p className="text-xs font-semibold text-primary">فلسفة التذوق</p>
@@ -283,7 +283,7 @@ export default function AboutUs() {
                 </div>
             </section>
 
-            {/* ---------------- Closing CTA ---------------- */}
+             ---------------- Closing CTA ----------------
             <section className="mx-auto max-w-7xl px-6 pb-20">
                 <div className="rounded-3xl bg-tertiary px-8 py-14 text-center text-neutral">
                     <span className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/15">
@@ -306,7 +306,7 @@ export default function AboutUs() {
                         </button>
                     </div>
                 </div>
-            </section>
+            </section>*/}
         </div>
     );
 }
