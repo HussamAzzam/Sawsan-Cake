@@ -25,6 +25,18 @@ export default function Home() {
     const { activeIndex, setActiveIndex } = usePanel();
     const isAnimating = useRef(false);
 
+    // Below `lg` (1024px), touch devices can't drive the wheel-based
+    // slide effect, so we fall back to normal scrolling there.
+    const [isSlideMode, setIsSlideMode] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(min-width: 1024px)");
+        const update = () => setIsSlideMode(mq.matches);
+        update();
+        mq.addEventListener("change", update);
+        return () => mq.removeEventListener("change", update);
+    }, []);
+
     const sections = [
         <HeroSection
             key="hero"
@@ -40,7 +52,7 @@ export default function Home() {
     ];
 
     useEffect(() => {
-        if (!isHeroReady) return;
+        if (!isHeroReady || !isSlideMode) return;
 
         const handleWheel = (e) => {
             if (isAnimating.current) return;
@@ -58,26 +70,38 @@ export default function Home() {
 
         window.addEventListener("wheel", handleWheel, { passive: true });
         return () => window.removeEventListener("wheel", handleWheel);
-    }, [activeIndex, isHeroReady, sections.length, setActiveIndex]);
+    }, [activeIndex, isHeroReady, isSlideMode, sections.length, setActiveIndex]);
 
     return (
-        <div className="font-body relative bg-background w-full h-screen overflow-hidden">
+        <div
+            className={`font-body relative bg-background w-full ${
+                isSlideMode ? "h-[100dvh] overflow-hidden" : ""
+            }`}
+        >
             {!isHeroReady && <Loader fullScreen size={`lg`} />}
 
             <div className={`${isHeroReady ? "animate-fade-in" : "invisible h-0 overflow-hidden"}`}>
-                {sections.map((section, index) => (
-                    <div
-                        key={index}
-                        className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
-                        style={{
-                            transform: `translateY(${(index - activeIndex) * 100}vh)`,
-                        }}
-                    >
-                        <ErrorBoundary level={`section`} variant={index === 0 ? undefined : `app`}>
-                            {section}
-                        </ErrorBoundary>
-                    </div>
-                ))}
+                {isSlideMode
+                    ? sections.map((section, index) => (
+                        <div
+                            key={index}
+                            className="absolute top-0 left-0 w-full h-[100dvh] flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
+                            style={{
+                                transform: `translateY(${(index - activeIndex) * 100}dvh)`,
+                            }}
+                        >
+                            <ErrorBoundary level={`section`} variant={index === 0 ? undefined : `app`}>
+                                {section}
+                            </ErrorBoundary>
+                        </div>
+                    ))
+                    : sections.map((section, index) => (
+                        <div key={index} className="w-full">
+                            <ErrorBoundary level={`section`} variant={index === 0 ? undefined : `app`}>
+                                {section}
+                            </ErrorBoundary>
+                        </div>
+                    ))}
             </div>
         </div>
     );
