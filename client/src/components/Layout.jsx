@@ -14,7 +14,11 @@ export default function Layout() {
                 <main className="flex-1">
                     <Outlet />
                 </main>
-                {!isHome && <Footer />}
+                {!isHome && (
+                    <div>
+                        <Footer />
+                    </div>
+                )}
             </div>
         </PanelProvider>
     );

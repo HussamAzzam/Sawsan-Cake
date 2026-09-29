@@ -11,10 +11,10 @@ const CategoryCard = ({catHref, catImage, catAlt, catName, catNumber}) => {
     return (
         <a
             href={catHref}
-            className={`flex flex-col items-center justify-between gap-5  bg-neutral rounded-sm shadow-md 
+            className={` w-full flex flex-col items-center justify-between gap-5  bg-neutral rounded-sm shadow-md  
                         transition-all ease-in-out duration-200 hover:-translate-y-5 hover:shadow-xl group/card `}
         >
-            <div className="w-80 h-fit">
+            <div className="w-full h-fit">
                 <img
                     src={catImage}
                     alt={catAlt}

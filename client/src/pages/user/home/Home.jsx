@@ -17,11 +17,14 @@ import {
     youtube, avatar, youtubeLogo
 } from "@/assets/assets.js";
 
+const MOBILE_BREAKPOINT = 768;
+
 export default function Home() {
     const videoUrl = import.meta.env.VITE_VIDEO_URL;
     const posterUrl = import.meta.env.VITE_POSTER_URL;
 
     const [isHeroReady, setIsHeroReady] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const { activeIndex, setActiveIndex } = usePanel();
     const isAnimating = useRef(false);
 
@@ -56,29 +59,53 @@ export default function Home() {
             }
         };
 
+
+
         window.addEventListener("wheel", handleWheel, { passive: true });
         return () => window.removeEventListener("wheel", handleWheel);
     }, [activeIndex, isHeroReady, sections.length, setActiveIndex]);
 
-    return (
-        <div className="font-body relative bg-background w-full h-screen overflow-hidden">
-            {!isHeroReady && <Loader fullScreen size={`lg`} />}
+    useEffect(() => {
+        const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+        const update = () => setIsMobile(mql.matches);
 
-            <div className={`${isHeroReady ? "animate-fade-in" : "invisible h-0 overflow-hidden"}`}>
-                {sections.map((section, index) => (
-                    <div
-                        key={index}
-                        className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
-                        style={{
-                            transform: `translateY(${(index - activeIndex) * 100}vh)`,
-                        }}
-                    >
-                        <ErrorBoundary level={`section`} variant={index === 0 ? undefined : `app`}>
+        update();
+        mql.addEventListener("change", update);
+        return () => mql.removeEventListener("change", update);
+    }, []);
+
+    return (
+        <div
+            className={`font-body relative bg-background w-full ${
+                isMobile ? "h-auto overflow-visible" : "h-screen overflow-hidden"
+            }`}
+        >
+            {!isHeroReady && <Loader fullScreen size={`lg`} />}
+            {isMobile ? (
+                <div>
+                    {sections.map((section, index) => (
+                        <ErrorBoundary key={index} level={`section`} variant={index === 0 ? undefined : `app`}>
                             {section}
                         </ErrorBoundary>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            ) : (
+                <div className={`${isHeroReady ? "animate-fade-in" : "invisible h-0 overflow-hidden"}`}>
+                    {sections.map((section, index) => (
+                        <div
+                            key={index}
+                            className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
+                            style={{
+                                transform: `translateY(${(index - activeIndex) * 100}vh)`,
+                            }}
+                        >
+                            <ErrorBoundary level={`section`} variant={index === 0 ? undefined : `app`}>
+                                {section}
+                            </ErrorBoundary>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
