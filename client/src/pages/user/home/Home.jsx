@@ -90,7 +90,7 @@ export default function Home() {
     return (
         <div
             className={`font-body relative bg-background w-full ${
-                isSlideMode ? "h-[100dvh] overflow-hidden" : ""
+                isSlideMode ? "h-dvh overflow-hidden" : ""
             }`}
         >
             {!isHeroReady && <Loader fullScreen size={`lg`} />}

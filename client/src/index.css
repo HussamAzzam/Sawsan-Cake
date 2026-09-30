@@ -67,16 +67,16 @@ body {
         shadow-sm transition-colors cursor-pointer
     }
     .section {
-        @apply w-[80%] min-h-screen flex items-center justify-between bg-background py-nav
+        @apply w-full lg:w-[80%] min-h-screen flex items-center justify-between bg-background py-nav px-3 lg:px-0
     }
     .tagline {
         @apply w-fit text-sm bg-light text-dark py-1 px-5 rounded-md
     }
     .title {
-        @apply font-bold text-xl
+        @apply font-bold text-xl text-center lg:text-start
     }
     .description {
-        @apply text-sm text-gray-500
+        @apply text-sm text-gray-500 text-center lg:text-start
     }
 
     .active {
