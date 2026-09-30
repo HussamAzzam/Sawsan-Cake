@@ -17,6 +17,8 @@ import {
     youtube, avatar, youtubeLogo
 } from "@/assets/assets.js";
 
+const SLIDE_QUERY = "(min-width: 1024px)";
+
 export default function Home() {
     const videoUrl = import.meta.env.VITE_VIDEO_URL;
     const posterUrl = import.meta.env.VITE_POSTER_URL;
@@ -27,15 +29,28 @@ export default function Home() {
 
     // Below `lg` (1024px), touch devices can't drive the wheel-based
     // slide effect, so we fall back to normal scrolling there.
-    const [isSlideMode, setIsSlideMode] = useState(false);
+    //
+    // IMPORTANT: read the media query synchronously for the initial state.
+    // Starting with `false` and flipping it in an effect made the sections
+    // mount stacked, then animate to their slide positions (the flash).
+    const [isSlideMode, setIsSlideMode] = useState(
+        () =>
+            typeof window !== "undefined" &&
+            window.matchMedia(SLIDE_QUERY).matches
+    );
 
     useEffect(() => {
-        const mq = window.matchMedia("(min-width: 1024px)");
+        const mq = window.matchMedia(SLIDE_QUERY);
         const update = () => setIsSlideMode(mq.matches);
-        update();
         mq.addEventListener("change", update);
         return () => mq.removeEventListener("change", update);
     }, []);
+
+    // Optional: always start at the hero when arriving on the page.
+    // Uncomment if you don't want to resume at the last visited section.
+    // useEffect(() => {
+    //     setActiveIndex(0);
+    // }, [setActiveIndex]);
 
     const sections = [
         <HeroSection
@@ -83,8 +98,11 @@ export default function Home() {
             <div className={`${isHeroReady ? "animate-fade-in" : "invisible h-0 overflow-hidden"}`}>
                 {isSlideMode
                     ? sections.map((section, index) => (
+                        // Different key prefix per mode so React remounts the
+                        // wrappers when resizing across 1024px instead of
+                        // animating from the old styles.
                         <div
-                            key={index}
+                            key={`slide-${index}`}
                             className="absolute top-0 left-0 w-full h-[100dvh] flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
                             style={{
                                 transform: `translateY(${(index - activeIndex) * 100}dvh)`,
@@ -96,7 +114,7 @@ export default function Home() {
                         </div>
                     ))
                     : sections.map((section, index) => (
-                        <div key={index} className="w-full">
+                        <div key={`flow-${index}`} className="w-full">
                             <ErrorBoundary level={`section`} variant={index === 0 ? undefined : `app`}>
                                 {section}
                             </ErrorBoundary>
