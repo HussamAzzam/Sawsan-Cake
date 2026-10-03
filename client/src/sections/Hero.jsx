@@ -123,10 +123,10 @@ const Hero = ({ mobilePoster, posterUrl, videoUrl, onVideoReady }) => {
 
             {/* Mobile hero buttons*/}
             <div className="md:hidden absolute bottom-10 w-full left-0 z-10 flex flex-col items-center justify-center gap-3 p-1">
-                <button className="bg-neutral text-primary text-lg font-bold w-3/4 px-5 py-3 rounded-md">
+                <button className="w-1/2 bg-neutral text-primary text-base font-bold  px-10 py-3 rounded-[10px]">
                     تصفح القائمة
                 </button>
-                <button className="bg-transparent text-neutral border border-neutral text-lg font-semibold w-3/4 px-5 py-3 rounded-md">
+                <button className="w-1/2 bg-transparent text-neutral border border-neutral text-base font-semibold px-10 py-3 rounded-[10px]">
                     تواصل معنا
                 </button>
             </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ErrorBoundary from "@/common/ErrorBoundary.jsx";
 import { usePanel } from "@/context/PanelContext";
 
@@ -25,6 +25,7 @@ export default function Home() {
 
     const [isHeroReady, setIsHeroReady] = useState(false);
     const { activeIndex, setActiveIndex } = usePanel();
+    console.log("Home sees", activeIndex);
     const isAnimating = useRef(false);
 
     // Below `lg` (1024px), touch devices can't drive the wheel-based
@@ -38,6 +39,10 @@ export default function Home() {
             typeof window !== "undefined" &&
             window.matchMedia(SLIDE_QUERY).matches
     );
+
+    useLayoutEffect(() => {
+        setActiveIndex(0);
+    }, [setActiveIndex]);
 
     useEffect(() => {
         const mq = window.matchMedia(SLIDE_QUERY);
@@ -98,9 +103,6 @@ export default function Home() {
             <div className={`${isHeroReady ? "animate-fade-in" : "invisible h-0 overflow-hidden"}`}>
                 {isSlideMode
                     ? sections.map((section, index) => (
-                        // Different key prefix per mode so React remounts the
-                        // wrappers when resizing across 1024px instead of
-                        // animating from the old styles.
                         <div
                             key={`slide-${index}`}
                             className="absolute top-0 left-0 w-full h-[100dvh] flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"

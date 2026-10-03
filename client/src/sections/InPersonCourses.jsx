@@ -5,16 +5,16 @@ const InPersonCourses = () => {
 
     return (
         <section className={`section justify-center items-center gap-5 `}>
-           <div className={`w-full flex justify-center items-center gap-5 bg-gray p-10 rounded-sm`}>
+           <div className={`w-full flex flex-col lg:flex-row justify-center items-center gap-5 bg-gray p-10 rounded-sm`}>
                 {/* Right */}
-               <div className={`w-1/2 flex flex-col gap-20`}>
+               <div className={`w-full lg:w-1/2 flex flex-col gap-20`}>
                     {/* Header */}
                     <div className={`flex flex-col gap-5 `}>
                         <div className={`tagline bg-secondary`}>تجربة حضورية تفاعلية</div>
                         <div className={`title`}>
                             ورش العمل الحية في أستوديو سوسن بالأردن
                         </div>
-                        <div className={`description text-base max-w-160`}>
+                        <div className={`description  lg:text-base max-w-160`}>
                             انغمسي في عالم الحلويات الاحترافي داخل مطبخنا المجهز بأحدث المعدات. مقاعد محدودة جداً
                             لضمان المتابعة الفردية لكل متدربة وصناعة كيكتك الخاصة بيدك من الصفر حتى استلام بوكس
                             التغليف الفاخر.
@@ -22,9 +22,9 @@ const InPersonCourses = () => {
                     </div>
 
                    {/* Info */}
-                   <div className={`flex items-start justify-start max-w-160 gap-5`}>
+                   <div className={`flex flex-col lg:flex-row items-start justify-start max-w-160 gap-5`}>
                        {/* Date */}
-                       <div className={`w-1/2 flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
+                       <div className={`w-full lg:w-1/2 flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
                            <div className={`flex items-center justify-start gap-2 text-md font-semibold`}>
                                <Calendar size={24} />
                                <div>
@@ -43,7 +43,7 @@ const InPersonCourses = () => {
                        </div>
 
                        {/* Location */}
-                       <div className={`w-1/2  flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
+                       <div className={`w-full lg:w-1/2  flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
                            <div className={`flex items-center justify-start gap-2 text-md font-semibold`}>
                                <MapPin size={24} />
                                <div>
@@ -61,7 +61,7 @@ const InPersonCourses = () => {
                        </div>
 
                    </div>
-                       <div className={`flex items-end justify-between max-w-160 gap-5`}>
+                       <div className={`flex flex-col lg:flex-row items-center lg:items-end justify-between max-w-160 gap-5`}>
                            <div className={`flex items-center gap-2`}>
                                <div className={`w-3 h-3 bg-dark rounded-full`}></div>
                                <div className={`text-dark text-base font-light`}>8 مقاعد فقط في هذه الورشة</div>
@@ -78,7 +78,7 @@ const InPersonCourses = () => {
                </div>
 
                {/* Left */}
-               <div className={`w-1/2 flex justify-center items-center gap-5 bg-gray`}>
+               <div className={`hidden lg:flex w-1/2 justify-center items-center gap-5 bg-gray`}>
                    <img
                        src={courseImage}
                         alt="course"
