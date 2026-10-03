@@ -105,7 +105,7 @@ export default function Home() {
                     ? sections.map((section, index) => (
                         <div
                             key={`slide-${index}`}
-                            className="absolute top-0 left-0 w-full h-[100dvh] flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
+                            className="absolute top-0 left-0 w-full h-dvh flex flex-col justify-center items-center transition-transform duration-700 ease-in-out overflow-y-auto"
                             style={{
                                 transform: `translateY(${(index - activeIndex) * 100}dvh)`,
                             }}

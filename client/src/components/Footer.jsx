@@ -150,7 +150,7 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div className={`w-full flex flex-col items-center gap-5 border-b-2 border-gray/50 pb-10`}>
-            <div className={`w-full flex items-center justify-between text-sm`}>
+            <div className={`w-full flex items-center justify-center text-sm gap-5`}>
               <a
                   href=""
                   className={`bg-white/10 border border-neutral/15 py-3 px-6 rounded-[10px] flex items-center gap-2 `}

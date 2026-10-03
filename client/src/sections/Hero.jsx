@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import GalleryButton from "@/components/CoolButton.jsx";
 
-const DESKTOP_QUERY = "(min-width: 768px)";
+const DESKTOP_QUERY = "(min-width: 1024px)";
 // Large file + slow connection can take a while; don't leave the loader forever.
 const READY_FALLBACK_MS = 30000;
 
@@ -100,7 +100,7 @@ const Hero = ({ mobilePoster, posterUrl, videoUrl, onVideoReady }) => {
                 onLoad={() => {
                     if (!isDesktop) markReady();
                 }}
-                className="md:hidden w-full h-full object-cover"
+                className="lg:hidden w-full h-full object-cover"
             />
 
             {/* Desktop hero video (poster shows until the blob is ready) */}
@@ -122,7 +122,7 @@ const Hero = ({ mobilePoster, posterUrl, videoUrl, onVideoReady }) => {
             )}
 
             {/* Mobile hero buttons*/}
-            <div className="md:hidden absolute bottom-10 w-full left-0 z-10 flex flex-col items-center justify-center gap-3 p-1">
+            <div className="lg:hidden absolute bottom-10 w-full left-0 z-10 flex flex-col items-center justify-center gap-3 p-1">
                 <button className="w-1/2 bg-neutral text-primary text-base font-bold  px-10 py-3 rounded-[10px]">
                     تصفح القائمة
                 </button>
@@ -132,7 +132,7 @@ const Hero = ({ mobilePoster, posterUrl, videoUrl, onVideoReady }) => {
             </div>
 
             {/* Desktop hero headers */}
-            <div className="hidden absolute top-90 w-full md:flex justify-between items-start px-20">
+            <div className="hidden absolute top-90 w-full lg:flex justify-between items-start px-20">
                 <div className="flex flex-col items-center justify-center gap-10">
                     <div className="font-heading text-neutral text-4xl flex flex-col items-center justify-center gap-5">
                         <span>حلويات</span> بتفرح الألب

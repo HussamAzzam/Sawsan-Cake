@@ -3,7 +3,7 @@ import { youtube, youtubeLogo, avatar } from "@/assets/assets"
 const OnlineCourses = () => {
     return (
 
-    <section className={`section flex-col items-center lg:items-start gap-5 bg-background`}>
+    <section className={`section  flex-col items-center lg:items-start gap-5 bg-background`}>
         {/* Header */}
         <div className={`w-full flex flex-col justify-between items-center lg:items-start gap-3`}>
             <div className={`flex flex-col gap-5 items-center lg:items-start`}>
@@ -83,12 +83,12 @@ const OnlineCourses = () => {
                 </div>
 
                 {/* Most popular */}
-                <div className={`relative w-full  flex flex-col lg:flex-row items-center justify-between px-5 py-10 lg:px-5 lg:py-5 bg-gray rounded-sm gap-5 lg:gap-0
+                <div className={`relative w-full flex flex-col md:flex-row items-center justify-between px-5 py-10 md:px-5 md:py-5 bg-gray rounded-sm gap-5 md:gap-0
                                  border-4 border-dark
                             `}>
-                    <div className={`lg:h-25 flex flex-col lg:flex-row items-center gap-5 `}>
+                    <div className={`md:h-30 flex flex-col md:flex-row items-center gap-5 `}>
                         {/* Poster */}
-                        <div className={`h-50 lg:h-full w-full lg:aspect-video bg-neutral flex justify-center items-center  rounded-sm`}>
+                        <div className={`h-50 md:h-full w-full  md:aspect-square bg-neutral flex justify-center items-center  rounded-sm`}>
                             <Play size={20} />
                         </div>
                         {/* Info */}

@@ -1,6 +1,6 @@
 export default function LoginPage() {
     return (
-        <div dir="rtl" className="min-h-screen bg-background font-body flex items-center justify-center px-4">
+        <div dir="rtl" className="h-screen bg-background font-body flex items-center justify-center px-4">
             <div className="w-full max-w-md bg-neutral rounded-[28px] shadow-md px-8 py-10 flex flex-col items-center text-center">
                 {/* Heading */}
                 <h2 className="font-heading text-xl text-tertiary mb-3">

@@ -22,9 +22,9 @@ const InPersonCourses = () => {
                     </div>
 
                    {/* Info */}
-                   <div className={`flex flex-col lg:flex-row items-start justify-start max-w-160 gap-5`}>
+                   <div className={`flex flex-col md:flex-row items-start justify-start max-w-160 gap-5`}>
                        {/* Date */}
-                       <div className={`w-full lg:w-1/2 flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
+                       <div className={`w-full md:w-1/2 flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
                            <div className={`flex items-center justify-start gap-2 text-md font-semibold`}>
                                <Calendar size={24} />
                                <div>
@@ -43,7 +43,7 @@ const InPersonCourses = () => {
                        </div>
 
                        {/* Location */}
-                       <div className={`w-full lg:w-1/2  flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
+                       <div className={`w-full md:w-1/2  flex flex-col gap-5 bg-neutral rounded-sm p-5`}>
                            <div className={`flex items-center justify-start gap-2 text-md font-semibold`}>
                                <MapPin size={24} />
                                <div>

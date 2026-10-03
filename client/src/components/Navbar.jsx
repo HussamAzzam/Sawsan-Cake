@@ -69,7 +69,7 @@ export default function Navbar() {
             </div>
 
             {/* Desktop version*/}
-            <div className="hidden  md:flex items-center w-full">
+            <div className="hidden  lg:flex items-center w-full">
               {/* Desktop Navigation Links + Brand Logo */}
               <div className="hidden w-full md:flex  items-center justify-between  space-x-1 lg:space-x-4">
                 <Link
@@ -140,7 +140,7 @@ export default function Navbar() {
         {isMobileMenuOpen && (
             <div
                 dir="rtl"
-                className="md:hidden absolute left-0 top-0 w-full flex
+                className="lg:hidden absolute left-0 top-0 w-full flex
                 flex-row-reverse items-start justify-between border-t border-gray-100 bg-white
                 px-4 pt-4 pb-4 space-y-1 text-right shadow-md"
             >
@@ -232,16 +232,12 @@ export default function Navbar() {
                         </button>
                       </div>
                   ) : (
-                      <button
-                          onClick={() => {
-                            loginWithGoogle();
-                            setIsMobileMenuOpen(false);
-                          }}
-                          type="button"
+                      <a
+                          href={`/login`}
                           className="w-full text-right block px-3 py-2 text-base font-medium text-pink-600 hover:bg-pink-50 rounded-md cursor-pointer transition-colors"
                       >
                         تسجيل الدخول
-                      </button>
+                      </a>
                   )}
                 </div>
               </div>

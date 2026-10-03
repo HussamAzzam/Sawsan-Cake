@@ -67,7 +67,7 @@ body {
         shadow-sm transition-colors cursor-pointer
     }
     .section {
-        @apply w-full lg:w-[80%] min-h-screen flex items-center justify-between bg-background py-nav px-5 lg:px-0
+        @apply w-full md:w-[80%] min-h-screen flex items-center justify-between bg-background py-nav px-5 lg:px-0 mx-auto
     }
     .tagline {
         @apply w-fit text-sm bg-light text-dark py-1 px-5 rounded-md
