@@ -13,8 +13,8 @@ import CategoryProducts from "../pages/user/category-products/CategoryProducts";
 
 // Admin Pages
 import Dashboard from "../pages/admin/dashboard/Dashboard";
-import MenuManager from "../pages/admin/menu-manager/MenuManager";
-import Content from "../pages/admin/content/Content";
+import GalleryManagement from "../pages/admin/gallery-management/GalleryManagement.jsx";
+import ProductsManagement from "../pages/admin/products-management/ProductsManagement.jsx";
 
 // Fallback Page
 import NotFound from "../pages/NotFound";
@@ -46,9 +46,8 @@ export default function AppRoutes() {
       <Route element={<AdminLayout />}>
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/menu-manager" element={<MenuManager />} />
-        <Route path="/admin/menu" element={<Navigate to="/admin/menu-manager" replace />} />
-        <Route path="/admin/content" element={<Content />} />
+        <Route path="/admin/gallery-management" element={<GalleryManagement />} />
+        <Route path="/admin/products-management" element={<ProductsManagement />} />
       </Route>
     </Routes>
   );

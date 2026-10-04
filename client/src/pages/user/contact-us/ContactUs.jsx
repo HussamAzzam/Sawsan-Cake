@@ -60,7 +60,7 @@ export default function ContactUs() {
                 </p>
             </section>
 
-            {/* ---------------- Main content ---------------- */}
+            {/* ---------------- Main products-management ---------------- */}
             <section className="mx-auto max-w-7xl px-6 py-14">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.5fr]">
                     {/* ---- Contact info cards ---- */}

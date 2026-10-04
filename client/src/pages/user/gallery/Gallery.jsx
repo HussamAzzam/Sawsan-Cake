@@ -104,7 +104,7 @@ export default function GalleryPage() {
                 </div>
             </section>
 
-            {/* ---------------- Masonry gallery (CSS grid) ---------------- */}
+            {/* ---------------- Masonry gallery-management (CSS grid) ---------------- */}
             <section className="mx-auto w-full px-6 py-14">
                 <div
                     className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
@@ -182,7 +182,7 @@ function GalleryImage({ item, order }) {
         e.stopPropagation();
         const link = document.createElement("a");
         link.href = item.src;
-        link.download = item.alt || "gallery-image";
+        link.download = item.alt || "gallery-management-image";
         document.body.appendChild(link);
         link.click();
         link.remove();

@@ -13,7 +13,7 @@ export default function LoginPage() {
                 </p>
 
                 {/* Google button */}
-                <button className="btn w-full !bg-secondary-light !text-dark hover:!text-dark hover:!bg-secondary-light border-0 gap-3 py-3">
+                <button className="btn w-full bg-secondary-light text-dark hover:text-dark hover:bg-secondary-light border-0 gap-3 py-3">
                     <span className="text-base font-semibold">المتابعة باستخدام Google</span>
                     <GoogleIcon />
                 </button>

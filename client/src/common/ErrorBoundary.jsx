@@ -1,6 +1,16 @@
 // src/components/ErrorBoundary.jsx
 import { Component } from "react";
+import { Home, RotateCcw } from "lucide-react";
 import { ERROR_VARIANTS } from "@/config/errorBoundariesConfig";
+
+const BUTTON_BASE =
+    "inline-flex items-center justify-center gap-2 text-md font-semibold py-3 px-8 rounded-md border-2 cursor-pointer transition-colors";
+
+// Main action (try again): filled
+const PRIMARY_BUTTON = `${BUTTON_BASE} bg-primary border-primary text-black hover:bg-neutral hover:text-primary`;
+
+// Second action (go home): outlined, so it is clear which one is the main action
+const SECONDARY_BUTTON = `${BUTTON_BASE} bg-transparent border-black/15 text-black/70 hover:border-primary hover:text-primary`;
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -35,50 +45,99 @@ class ErrorBoundary extends Component {
         return variant || "general";
     }
 
+    // The buttons under the message
+    renderActions(config, key) {
+        // Trying again can't fix a missing page, so 404 only gets the "home" button
+        const showRetry = key !== "notFound";
+
+        return (
+            <div className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch gap-3">
+                {showRetry && (
+                    <button onClick={this.handleReset} className={PRIMARY_BUTTON}>
+                        <RotateCcw size={18} />
+                        <span>{config.buttonText}</span>
+                    </button>
+                )}
+                <a href="/" className={showRetry ? SECONDARY_BUTTON : PRIMARY_BUTTON}>
+                    <Home size={18} />
+                    <span>{config.homeButtonText || "العودة للصفحة الرئيسية"}</span>
+                </a>
+            </div>
+        );
+    }
+
+    // Technical message: only while developing, never shown to real visitors
+    renderDetails() {
+        const message = this.state.error?.message;
+        if (!import.meta.env.DEV || !message) return null;
+
+        return (
+            <details className="w-full max-w-xl text-start">
+                <summary className="text-sm text-black/60 cursor-pointer">
+                    تفاصيل تقنية (تظهر للمطور فقط)
+                </summary>
+                <pre
+                    dir="ltr"
+                    className="mt-2 p-3 rounded-md bg-black/5 text-xs text-black/80 text-left whitespace-pre-wrap break-words overflow-auto max-h-40"
+                >
+                    {message}
+                </pre>
+            </details>
+        );
+    }
+
     renderDefaultFallback() {
         const { level } = this.props;
         const key = this.resolveVariant();
         const config = ERROR_VARIANTS[key] || ERROR_VARIANTS.general;
 
+        // A part of a page crashed: show a compact card in place of that part
         if (level === "section") {
             return (
-                <div className="section flex flex-col items-center justify-start gap-10 py-10 text-center ">
-                    <p className="text-neutral title bg-primary p-10 rounded-sm">
-                        {config.text}
-                    </p>
-                    <button
-                        onClick={this.handleReset}
-                        className="text-md text-neutral font-semibold bg-primary py-2 px-5 rounded-md cursor-pointer border-3 border-primary hover:bg-neutral hover:text-primary"
-                    >
-                        {config.buttonText}
-                    </button>
-                    <div>
-                        <img src={config.image} alt={config.title} />
+                <div
+                    role="alert"
+                    className="section flex flex-col items-center justify-center gap-6 py-10 px-4 text-center"
+                >
+                    <img
+                        src={config.image}
+                        alt={config.title}
+                        className="w-56 sm:w-72 md:w-80 max-w-full h-auto object-contain"
+                    />
+                    <div className="flex flex-col gap-2 max-w-xl">
+                        <h2 className="text-xl font-bold text-black">
+                            {config.title}
+                        </h2>
+                        <p className="text-base text-black/70 leading-relaxed">
+                            {config.text}
+                        </p>
                     </div>
+                    {this.renderActions(config, key)}
+                    {this.renderDetails()}
                 </div>
             );
         }
 
         // level === "page" (default / full app)
         return (
-            <div className="w-full min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
+            <div
+                role="alert"
+                className="w-full min-h-screen flex flex-col items-center justify-center gap-8 text-center px-6 py-10"
+            >
                 <img
                     src={config.image}
                     alt={config.title}
-                    className="w-48 h-48 object-contain"
+                    className="w-64 sm:w-80 md:w-96 max-w-full h-auto object-contain"
                 />
-                <p className="text-neutral text-lg font-bold">
-                    {config.title}
-                </p>
-                <p className="text-neutral/60 text-sm">
-                    {config.text}
-                </p>
-                <button
-                    onClick={this.handleReset}
-                    className="text-sm underline text-neutral/70"
-                >
-                    {config.buttonText}
-                </button>
+                <div className="flex flex-col gap-3 max-w-xl">
+                    <h1 className="text-xl md:text-2xl font-bold text-black">
+                        {config.title}
+                    </h1>
+                    <p className="text-base md:text-lg text-black/70 leading-relaxed">
+                        {config.text}
+                    </p>
+                </div>
+                {this.renderActions(config, key)}
+                {this.renderDetails()}
             </div>
         );
     }

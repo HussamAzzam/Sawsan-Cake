@@ -67,16 +67,16 @@ const OnlineCourses = () => {
                 </div>
 
                 {/* Panels */}
-                <div className={`w-full h-30 flex items-center justify-between gap-3 lg:gap-5 bg-gray rounded-sm p-2 lg:p-5`}>
-                    <div className={`w-40 h-full flex flex-col justify-center items-center gap-2 bg-neutral rounded-sm p-2`}>
+                <div className={`w-full  flex items-center justify-between gap-3 lg:gap-5 bg-gray rounded-sm p-2 lg:p-5`}>
+                    <div className={`w-40 h-25 lg:h-30 flex flex-col justify-center items-center gap-2 bg-neutral rounded-sm p-2`}>
                         <span className={`text-md font-bold text-dark text-center`}>+145K</span>
                         <span className={`text-sm text-gray-500 text-center`}>مشتركة ومشترك</span>
                     </div>
-                    <div className={`w-40 h-full flex flex-col justify-center items-center gap-2 bg-neutral rounded-sm p-2`}>
+                    <div className={`w-40 h-25 lg:h-30 flex flex-col justify-center items-center gap-2 bg-neutral rounded-sm p-2`}>
                         <span className={`text-md font-bold text-dark text-center`}>+180</span>
                         <span className={`text-sm text-gray-500 text-center`}>درس وورشة مجانية</span>
                     </div>
-                    <div className={`w-40 h-full flex flex-col justify-center items-center gap-2 bg-neutral rounded-sm p-2`}>
+                    <div className={`w-40 h-25 lg:h-30 flex flex-col justify-center items-center gap-2 bg-neutral rounded-sm p-2`}>
                         <span className={`text-md font-bold text-dark text-center`}>+1M</span>
                         <span className={`text-sm text-gray-500 text-center`}>مشاهدة</span>
                     </div>
