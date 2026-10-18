@@ -1,19 +1,29 @@
+// src/pages/user/login/LoginPage.jsx
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext.jsx";
+
 export default function LoginPage() {
+    const { user, loading, isAdmin, login } = useAuth();
+
+    if (loading) return null;
+    if (user) return <Navigate to={isAdmin ? "/admin/dashboard" : "/"} replace />;
+
     return (
         <div dir="rtl" className="h-screen bg-background font-body flex items-center justify-center px-4">
             <div className="w-full max-w-md bg-neutral rounded-[28px] shadow-md px-8 py-10 flex flex-col items-center text-center">
-                {/* Heading */}
                 <h2 className="font-heading text-xl text-tertiary mb-3">
                     مرحباً بكِ في سوسن كيك
                 </h2>
 
-                {/* Description */}
                 <p className="description text-dark/70 leading-relaxed mb-8">
                     سجّلي دخولكِ للمتابعة وطلب أشهى قوالب الكيك.
                 </p>
 
-                {/* Google button */}
-                <button className="btn w-full bg-secondary-light text-dark hover:text-dark hover:bg-secondary-light border-0 gap-3 py-3">
+                <button
+                    type="button"
+                    onClick={login}
+                    className="btn w-full bg-secondary-light text-dark hover:text-dark hover:bg-secondary-light border-0 gap-3 py-3"
+                >
                     <span className="text-base font-semibold">المتابعة باستخدام Google</span>
                     <GoogleIcon />
                 </button>

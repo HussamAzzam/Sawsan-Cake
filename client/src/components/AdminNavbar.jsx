@@ -1,9 +1,9 @@
+// src/components/AdminNavbar.jsx
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { ArrowLeft } from "lucide-react"
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { ArrowLeft, LogOut } from "lucide-react"
+import { useAuth } from "@/context/AuthContext.jsx";
 
-// One list used by both the desktop and the mobile menu,
-// so they can never get out of sync again
 const adminLinks = [
   { to: "/admin/dashboard", label: "اللوحة الرئيسية" },
   { to: "/admin/products-management", label: "ادارة المنتجات" },
@@ -12,6 +12,14 @@ const adminLinks = [
 
 export default function AdminNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    setIsMobileMenuOpen(false);
+    await logout();
+    navigate("/login", { replace: true });
+  };
 
   const adminNavLinkStyle = ({ isActive }) =>
       `px-4 py-3 rounded-[10px] text-sm font-medium transition-colors ${
@@ -29,7 +37,6 @@ export default function AdminNavbar() {
       <nav className="bg-slate-900 text-white shadow-md border-b border-slate-800 sticky top-0 z-50">
         <div className="w-full px-4 sm:px-5 lg:px-10">
           <div className="flex justify-between items-center h-16">
-            {/* Admin Brand */}
             <div className="flex items-center space-x-3">
               <Link
                   to="/admin/dashboard"
@@ -39,7 +46,6 @@ export default function AdminNavbar() {
               </Link>
             </div>
 
-            {/* Desktop Nav Links */}
             <div className="hidden md:flex items-center gap-5 space-x-2">
               {adminLinks.map((link) => (
                   <NavLink key={link.to} to={link.to} className={adminNavLinkStyle}>
@@ -48,8 +54,7 @@ export default function AdminNavbar() {
               ))}
             </div>
 
-            {/* Right Action - Back to Main Site */}
-            <div className="hidden md:flex items-center space-x-3">
+            <div className="hidden md:flex items-center gap-3">
               <Link
                   to="/"
                   className="flex items-center justify-center
@@ -60,9 +65,18 @@ export default function AdminNavbar() {
                 <span>عرض الموقع</span>
                 <ArrowLeft size={15}/>
               </Link>
+              <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex items-center justify-center gap-1.5 text-sm px-4 py-3 rounded-lg
+               border border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-red-600
+                hover:text-white transition-colors cursor-pointer"
+              >
+                <span>تسجيل الخروج</span>
+                <LogOut size={15}/>
+              </button>
             </div>
 
-            {/* Mobile menu button */}
             <div className="flex md:hidden items-center">
               <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -82,7 +96,6 @@ export default function AdminNavbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
             <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-2 pb-4 space-y-1">
               {adminLinks.map((link) => (
@@ -96,7 +109,7 @@ export default function AdminNavbar() {
                   </NavLink>
               ))}
 
-              <div className="pt-2 border-t border-slate-800">
+              <div className="pt-2 border-t border-slate-800 flex flex-col gap-1">
                 <Link
                     to="/"
                     className="flex items-center gap-1.5 px-3 py-2 text-sm text-pink-400 hover:text-pink-300"
@@ -105,6 +118,14 @@ export default function AdminNavbar() {
                   <span>عرض الموقع</span>
                   <ArrowLeft size={15} />
                 </Link>
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-red-400 hover:text-red-300 cursor-pointer"
+                >
+                  <span>تسجيل الخروج</span>
+                  <LogOut size={15} />
+                </button>
               </div>
             </div>
         )}

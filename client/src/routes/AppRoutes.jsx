@@ -1,6 +1,8 @@
+// src/routes/AppRoutes.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import AdminLayout from "../components/AdminLayout";
+import { AdminRoute } from "../components/RouteGuards.jsx";
 
 // User Pages
 import Home from "../pages/user/home/Home";
@@ -22,10 +24,8 @@ import NotFound from "../pages/NotFound";
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Standalone Auth Route */}
       <Route path="/login" element={<LoginPage />} />
 
-      {/* User Routes with User Layout (Navbar & Footer) */}
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
@@ -34,20 +34,17 @@ export default function AppRoutes() {
         <Route path="/about" element={<Navigate to="/about-us" replace />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/contact" element={<Navigate to="/contact-us" replace />} />
-
-        {/* Category Products Routes*/}
         <Route path="/category/:slug" element={<CategoryProducts />} />
-
-        {/* 404 Catch-all within user layout */}
         <Route path="*" element={<NotFound />} />
       </Route>
 
-      {/* Admin Routes with Admin Layout (AdminNavbar only, no Footer) */}
-      <Route element={<AdminLayout />}>
-        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/gallery-management" element={<GalleryManagement />} />
-        <Route path="/admin/products-management" element={<ProductsManagement />} />
+      <Route element={<AdminRoute />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/gallery-management" element={<GalleryManagement />} />
+          <Route path="/admin/products-management" element={<ProductsManagement />} />
+        </Route>
       </Route>
     </Routes>
   );

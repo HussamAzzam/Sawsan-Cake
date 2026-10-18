@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+// src/pages/admin/products-management/ProductsManagement.jsx
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import {
     Archive,
     Cake,
@@ -13,78 +14,144 @@ import {
     SlidersHorizontal,
     Trash2,
     Undo2,
+    X,
 } from "lucide-react"
 import { cakeSample } from "@/assets/assets.js"
-import { categories } from "@/data/categories.js"
+import { getProducts, deleteProduct } from "@/api/productService.js"
+import { getCategories } from "@/api/categoryService.js"
+import ProductFormModal from "@/components/ProductFormModal.jsx"
+import CategoryFormModal from "@/components/CategoryFormModal.jsx"
+import ManageCategoriesModal from "@/components/ManageCategoriesModal.jsx"
 
 const PAGE_SIZE = 5
-const UNDO_MS = 5000 // how long the "undo" toast stays visible
-const categoryNames = Object.fromEntries(categories.map((c) => [c.slug, c.catName]))
+const UNDO_MS = 5000
+const TAB_GAP = 12
 
-const TAB_GAP = 12 // must match `gap-3` on the tabs row
-
-// Page side padding: small on phones, your original px-50 on large screens
 const PAGE_PX = `px-4 md:px-8 lg:px-12 xl:px-50`
 
-// Table: a real 5-column grid on desktop (xl+), stacked "cards" on phones and tablets.
-// RTL: the first column is on the right.
 const HEAD_GRID = `hidden xl:grid xl:grid-cols-[120px_1fr_160px_180px_180px] items-center gap-4`
 const ROW_GRID = `grid grid-cols-[80px_1fr] xl:grid-cols-[120px_1fr_160px_180px_180px] items-center gap-4`
 
 const TAB_CLASS = `shrink-0 whitespace-nowrap text-base font-semibold px-5 py-2 rounded-sm cursor-pointer`
 
-const initialProducts = [
-    { id: 1, name: "كيك الفراولة الملكي", category: "cakes", details: "قطر 24 سم", serves: "12-14 شخص", price: 32.0, likes: 142, image: cakeSample },
-    { id: 2, name: "كيك فانيلا الورد الطبيعي", category: "cakes", details: "طبقات هشة بماء الورد", price: 28.5, likes: 76, image: cakeSample },
-    { id: 3, name: "تشيز كيك التوت البري", category: "cheesecakes", details: "مخبوز بطريقة نيويورك", price: 26.0, likes: 210, image: cakeSample },
-    { id: 4, name: "سان سباستيان تشيز كيك", category: "cheesecakes", details: "قطر 20 سم", price: 24.0, likes: 188, image: cakeSample },
-    { id: 5, name: "كنافة نابلسية", category: "eastern-sweets", details: "صينية 12 قطعة", price: 18.0, likes: 164, image: cakeSample },
-    { id: 6, name: "كوكيز الشوكولاتة", category: "cookies-tart", details: "بوكس 6 قطع", price: 9.0, likes: 64, image: cakeSample },
-    { id: 7, name: "موس الشوكولاتة البلجيكي", category: "chocolate", details: "شوكولاتة داكنة 70%", price: 35.0, likes: 304, image: cakeSample },
-    { id: 8, name: "ترايفل التوت", category: "cold-desserts", details: "كاسات فردية", price: 6.5, likes: 71, image: cakeSample },
-    { id: 9, name: "معجنات الجبنة المشكلة", category: "pastries", details: "بوكس 12 قطعة", price: 12.0, likes: 95, image: cakeSample },
-    { id: 10, name: "معمول التمر والجوز", category: "eid-sweets", details: "علبة 500 غرام", price: 14.0, likes: 133, image: cakeSample },
-    { id: 11, name: "كيك الكراميل المملح", category: "cakes", details: "قطر 24 سم", serves: "10-12 شخص", price: 31.0, likes: 120, image: cakeSample },
-    { id: 12, name: "كعك العيد بالسمسم", category: "eid-sweets", details: "علبة 1 كيلو", price: 16.0, likes: 58, image: cakeSample },
-]
+const asList = (data, key) => (Array.isArray(data) ? data : data?.[key] || [])
+const likesOf = (p) => p.likesCount ?? p.likes ?? 0
 
-export default function ProductManagement() {
-    const [products, setProducts] = useState(initialProducts)
+export default function ProductsManagement() {
+    const [products, setProducts] = useState([])
+    const [total, setTotal] = useState(0)
+    const [pages, setPages] = useState(1)
+    const [categories, setCategories] = useState([])
+    const [categoriesReady, setCategoriesReady] = useState(false)
+    const [productsReady, setProductsReady] = useState(false)
+    const [loadError, setLoadError] = useState("")
+    const [actionError, setActionError] = useState("")
     const [activeCategory, setActiveCategory] = useState("all")
     const [search, setSearch] = useState("")
+    const [debouncedSearch, setDebouncedSearch] = useState("")
     const [page, setPage] = useState(1)
-    const [counts, setCounts] = useState(() =>
-        Object.fromEntries(categories.map((c) => [c.slug, c.catNumber]))
-    )
+    const [reloadKey, setReloadKey] = useState(0)
 
-    // Delete confirmation + undo
-    const [pendingDelete, setPendingDelete] = useState(null) // product waiting for confirmation
-    const undoRef = useRef(null)      // { product, index } of the last deleted product
+    const [productModal, setProductModal] = useState(false)
+    const [editingProduct, setEditingProduct] = useState(null)
+    const [categoryModal, setCategoryModal] = useState(false)
+    const [editingCategory, setEditingCategory] = useState(null)
+    const [manageModal, setManageModal] = useState(false)
+
+    const [pendingDelete, setPendingDelete] = useState(null)
+    const undoRef = useRef(null)
     const timerRef = useRef(null)
-    const [undoName, setUndoName] = useState(null) // only drives the toast (null = hidden)
+    const [undoName, setUndoName] = useState(null)
 
-    // Tabs overflow
-    const tabsRef = useRef(null)      // real tabs container (its width is the space we can fill)
-    const measureRef = useRef(null)   // hidden row used only to measure every tab's width
-    const moreRef = useRef(null)      // "more" button + dropdown (for click-outside)
+    const tabsRef = useRef(null)
+    const measureRef = useRef(null)
+    const moreRef = useRef(null)
     const [visibleCount, setVisibleCount] = useState(Infinity)
     const [showMore, setShowMore] = useState(false)
 
-    // Derived data
-    const tabs = useMemo(() => {
-        const list = categories.map((c) => ({
-            slug: c.slug,
-            name: c.catName,
-            count: counts[c.slug],
-        }))
-        const total = list.reduce((sum, c) => sum + c.count, 0)
-        return [{ slug: "all", name: "الكل", count: total }, ...list]
-    }, [counts])
+    const loadCategories = useCallback(async () => {
+        try {
+            const res = await getCategories()
+            setCategories(asList(res.data, "categories"))
+        } catch (err) {
+            setLoadError(err.response?.data?.message || "تعذر تحميل التصنيفات")
+        } finally {
+            setCategoriesReady(true)
+        }
+    }, [])
+
+    useEffect(() => {
+        loadCategories()
+    }, [loadCategories])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search.trim())
+            setPage(1)
+        }, 400)
+        return () => clearTimeout(timer)
+    }, [search])
+
+    useEffect(() => {
+        const controller = new AbortController()
+        getProducts(
+            {
+                page,
+                limit: PAGE_SIZE,
+                category: activeCategory === "all" ? undefined : activeCategory,
+                search: debouncedSearch || undefined,
+            },
+            { signal: controller.signal }
+        )
+            .then((res) => {
+                const list = res.data.products || []
+                if (list.length === 0 && page > 1) {
+                    setPage(page - 1)
+                    return
+                }
+                setProducts(list)
+                setTotal(res.data.total || 0)
+                setPages(res.data.pages || 1)
+            })
+            .catch((err) => {
+                if (err.code === "ERR_CANCELED") return
+                setActionError(err.response?.data?.message || "تعذر تحميل المنتجات")
+            })
+            .finally(() => {
+                if (!controller.signal.aborted) setProductsReady(true)
+            })
+        return () => controller.abort()
+    }, [page, activeCategory, debouncedSearch, reloadKey])
+
+    const loading = !(categoriesReady && productsReady)
+
+    const categoryById = useMemo(
+        () => Object.fromEntries(categories.map((c) => [c._id, c])),
+        [categories]
+    )
+
+    const countsById = useMemo(
+        () => Object.fromEntries(categories.map((c) => [c._id, c.productsCount || 0])),
+        [categories]
+    )
+
+    const allCount = useMemo(
+        () => categories.reduce((sum, c) => sum + (c.productsCount || 0), 0),
+        [categories]
+    )
+
+    const tabs = useMemo(
+        () => [
+            { slug: "all", name: "الكل", count: allCount },
+            ...categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productsCount || 0 })),
+        ],
+        [categories, allCount]
+    )
 
     const stats = useMemo(() => [
         {
             label: "إجمالي الأصناف النشطة",
-            value: tabs[0].count,
+            value: allCount,
             unit: "منتج",
             icon: Cake,
         },
@@ -94,26 +161,28 @@ export default function ProductManagement() {
             unit: "تصنيفات",
             icon: Grip,
         },
-    ], [tabs])
+    ], [allCount, categories.length])
 
-    const filtered = useMemo(() => {
-        const q = search.trim()
-        return products.filter((p) => {
-            const matchCategory = activeCategory === "all" || p.category === activeCategory
-            const matchSearch = !q || p.name.includes(q) || categoryNames[p.category].includes(q)
-            return matchCategory && matchSearch
-        })
-    }, [products, activeCategory, search])
+    const categoryNameOf = (p) => p.category?.name || categoryById[p.category]?.name || ""
+    const categoryIdOf = (p) => p.category?._id || p.category
 
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+    const adjustCount = (categoryId, delta) =>
+        setCategories((prev) =>
+            prev.map((c) =>
+                c._id === categoryId
+                    ? { ...c, productsCount: Math.max(0, (c.productsCount || 0) + delta) }
+                    : c
+            )
+        )
+
+    const totalPages = Math.max(1, pages)
     const currentPage = Math.min(page, totalPages)
-    const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+    const visible = products
 
     const shownTabs = tabs.slice(0, visibleCount)
     const hiddenTabs = tabs.slice(visibleCount)
     const isActiveHidden = hiddenTabs.some((t) => t.slug === activeCategory)
 
-    // Work out how many tabs fit; the rest go behind the "more" button
     useLayoutEffect(() => {
         const container = tabsRef.current
         const measure = measureRef.current
@@ -121,11 +190,11 @@ export default function ProductManagement() {
 
         const calculate = () => {
             const widths = [...measure.children].map((el) => el.offsetWidth)
-            const moreWidth = widths.pop() // last child is a sample "more" button
+            const moreWidth = widths.pop()
             const available = container.clientWidth
 
-            const total = widths.reduce((sum, w, i) => sum + w + (i ? TAB_GAP : 0), 0)
-            if (total <= available) {
+            const totalWidth = widths.reduce((sum, w, i) => sum + w + (i ? TAB_GAP : 0), 0)
+            if (totalWidth <= available) {
                 setVisibleCount(widths.length)
                 return
             }
@@ -145,9 +214,8 @@ export default function ProductManagement() {
         const observer = new ResizeObserver(calculate)
         observer.observe(container)
         return () => observer.disconnect()
-    }, [tabs])
+    }, [tabs, loading])
 
-    // Close the dropdown when clicking outside
     useEffect(() => {
         if (!showMore) return
         const onClick = (e) => {
@@ -157,7 +225,6 @@ export default function ProductManagement() {
         return () => document.removeEventListener("mousedown", onClick)
     }, [showMore])
 
-    // Close the delete dialog with Escape
     useEffect(() => {
         if (!pendingDelete) return
         const onKey = (e) => e.key === "Escape" && setPendingDelete(null)
@@ -165,56 +232,107 @@ export default function ProductManagement() {
         return () => document.removeEventListener("keydown", onKey)
     }, [pendingDelete])
 
-    // Stop the undo timer when leaving the page
     useEffect(() => {
         return () => {
             clearTimeout(timerRef.current)
-            // TODO: if undoRef.current still has a product here, send its delete request now
+            if (undoRef.current) {
+                deleteProduct(undoRef.current.product._id).catch(() => {})
+            }
         }
     }, [])
 
-    // Handlers
-    const handleCategory = (category) => {
-        setActiveCategory(category)
+    const refreshAll = () => {
+        setReloadKey((k) => k + 1)
+        loadCategories()
+    }
+
+    const handleCategory = (slug) => {
+        setActiveCategory(slug)
         setPage(1)
         setShowMore(false)
     }
 
     const handleSearch = (e) => {
         setSearch(e.target.value)
+    }
+
+    const openAddProduct = () => {
+        setEditingProduct(null)
+        setProductModal(true)
+    }
+
+    const openEditProduct = (product) => {
+        setEditingProduct(product)
+        setProductModal(true)
+    }
+
+    const handleProductSaved = (saved, isEdit) => {
+        if (!isEdit) setPage(1)
+        refreshAll()
+    }
+
+    const openAddCategory = () => {
+        setEditingCategory(null)
+        setCategoryModal(true)
+    }
+
+    const openEditCategory = (category) => {
+        setEditingCategory(category)
+        setCategoryModal(true)
+    }
+
+    const handleCategorySaved = () => {
+        setActiveCategory("all")
         setPage(1)
+        refreshAll()
     }
 
-    // Step 1: the trash button only asks for confirmation
-    const requestDelete = (id) => {
-        setPendingDelete(products.find((p) => p.id === id) ?? null)
+    const handleCategoryDeleted = () => {
+        setActiveCategory("all")
+        setPage(1)
+        refreshAll()
     }
 
-    // The product leaves the screen immediately, but it is only "really" deleted
-    // when the toast expires (finalizeDelete). Until then it can be restored.
+    const requestDelete = (product) => {
+        setPendingDelete(product)
+    }
+
+    const restoreProduct = (item) => {
+        setProducts((prev) => {
+            const next = [...prev]
+            next.splice(Math.min(item.index, next.length), 0, item.product)
+            return next
+        })
+        setTotal((t) => t + 1)
+        adjustCount(categoryIdOf(item.product), 1)
+    }
+
     const finalizeDelete = () => {
         clearTimeout(timerRef.current)
-        if (!undoRef.current) return
-
-        // TODO: call the delete endpoint with undoRef.current.product.id
-
+        const item = undoRef.current
+        if (!item) return
         undoRef.current = null
         setUndoName(null)
+
+        deleteProduct(item.product._id)
+            .then(() => setReloadKey((k) => k + 1))
+            .catch((err) => {
+                restoreProduct(item)
+                setActionError(err.response?.data?.message || "تعذر حذف المنتج")
+            })
     }
 
-    // Step 2: the user confirmed
     const handleDelete = (id) => {
-        finalizeDelete() // a previous delete that is still waiting becomes final
+        finalizeDelete()
+        setActionError("")
 
-        const index = products.findIndex((p) => p.id === id)
+        const index = products.findIndex((p) => p._id === id)
         if (index === -1) return
         const product = products[index]
 
-        setProducts((prev) => prev.filter((p) => p.id !== id))
-        setCounts((prev) => ({
-            ...prev,
-            [product.category]: Math.max(0, prev[product.category] - 1),
-        }))
+        setProducts((prev) => prev.filter((p) => p._id !== id))
+        setTotal((t) => Math.max(0, t - 1))
+        adjustCount(categoryIdOf(product), -1)
 
         undoRef.current = { product, index }
         setUndoName(product.name)
@@ -222,7 +340,7 @@ export default function ProductManagement() {
     }
 
     const confirmDelete = () => {
-        handleDelete(pendingDelete.id)
+        handleDelete(pendingDelete._id)
         setPendingDelete(null)
     }
 
@@ -230,30 +348,29 @@ export default function ProductManagement() {
         const item = undoRef.current
         if (!item) return
         clearTimeout(timerRef.current)
-
-        // Put the product back at its old position
-        setProducts((prev) => {
-            const next = [...prev]
-            next.splice(Math.min(item.index, next.length), 0, item.product)
-            return next
-        })
-        setCounts((prev) => ({
-            ...prev,
-            [item.product.category]: prev[item.product.category] + 1,
-        }))
-
+        restoreProduct(item)
         undoRef.current = null
         setUndoName(null)
     }
 
-    const handleEdit = (id) => {
-        // TODO: open edit modal / navigate to edit page
-        console.log("edit product", id)
+    if (loading) {
+        return (
+            <main className={`w-full min-h-screen flex items-center justify-center bg-background`}>
+                <p className={`text-base text-dark/70`}>جاري التحميل...</p>
+            </main>
+        )
+    }
+
+    if (loadError) {
+        return (
+            <main className={`w-full min-h-screen flex items-center justify-center bg-background`}>
+                <p className={`text-base text-dark`}>{loadError}</p>
+            </main>
+        )
     }
 
     return (
         <main className={`w-full min-h-screen flex flex-col items-start gap-6 md:gap-8 ${PAGE_PX} py-6 md:py-10 bg-background`}>
-            {/* Header */}
             <div className={`w-full flex flex-col md:flex-row md:items-center justify-between gap-6 bg-neutral rounded-sm shadow-md p-5 md:p-10`}>
                 <div className={`flex flex-col items-start gap-3`}>
                     <div className={`flex items-center gap-2 text-sm text-dark`}>
@@ -270,12 +387,14 @@ export default function ProductManagement() {
 
                 <div className={`w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4`}>
                     <button
+                        onClick={openAddProduct}
                         className={`flex items-center justify-center gap-2 bg-dark text-white text-base font-semibold px-6 py-4 rounded-sm shadow-md cursor-pointer`}
                     >
                         <CirclePlus size={20} />
                         <span>إضافة منتج جديد</span>
                     </button>
                     <button
+                        onClick={openAddCategory}
                         className={`flex items-center justify-center gap-2 bg-light text-dark text-base font-semibold px-6 py-4 rounded-sm cursor-pointer`}
                     >
                         <Shapes size={20} />
@@ -284,7 +403,15 @@ export default function ProductManagement() {
                 </div>
             </div>
 
-            {/* Stats */}
+            {actionError && (
+                <div className={`w-full flex items-center justify-between gap-4 bg-neutral border border-red-600 rounded-sm px-5 py-3`}>
+                    <span className={`text-base text-red-600`}>{actionError}</span>
+                    <button onClick={() => setActionError("")} aria-label="إغلاق" className={`text-red-600 cursor-pointer`}>
+                        <X size={18} />
+                    </button>
+                </div>
+            )}
+
             <div className={`w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-8`}>
                 {stats.map((stat) => {
                     const Icon = stat.icon
@@ -309,11 +436,8 @@ export default function ProductManagement() {
                 })}
             </div>
 
-            {/* Filters */}
             <div className={`w-full flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6 bg-neutral rounded-sm shadow-md p-4 md:p-5`}>
-                {/* Category tabs (takes all the free space, overflow goes into "more") */}
                 <div ref={tabsRef} className={`relative w-full lg:flex-1 min-w-0`}>
-                    {/* Hidden row: measures the natural width of every tab + the "more" button */}
                     <div className={`absolute inset-0 overflow-hidden invisible pointer-events-none`} aria-hidden="true">
                         <div ref={measureRef} className={`flex items-center gap-3 w-max`}>
                             {tabs.map((tab) => (
@@ -328,7 +452,6 @@ export default function ProductManagement() {
                         </div>
                     </div>
 
-                    {/* Real tabs */}
                     <div className={`flex items-center gap-3`}>
                         {shownTabs.map((tab) => (
                             <button
@@ -342,7 +465,6 @@ export default function ProductManagement() {
                             </button>
                         ))}
 
-                        {/* More button */}
                         {hiddenTabs.length > 0 && (
                             <div ref={moreRef} className={`shrink-0 sm:relative`}>
                                 <button
@@ -378,9 +500,9 @@ export default function ProductManagement() {
                     </div>
                 </div>
 
-                {/* Search + manage categories */}
                 <div className={`w-full lg:w-auto lg:shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4`}>
                     <button
+                        onClick={() => setManageModal(true)}
                         className={`flex items-center justify-center gap-2 bg-light text-dark text-base font-semibold px-4 py-2 rounded-sm cursor-pointer`}
                     >
                         <SlidersHorizontal size={18} />
@@ -391,16 +513,14 @@ export default function ProductManagement() {
                         <input
                             value={search}
                             onChange={handleSearch}
-                            placeholder="تصفية بالاسم أو التصنيف..."
+                            placeholder="تصفية بالاسم أو الوصف..."
                             className={`w-full bg-transparent outline-none text-base text-dark placeholder:text-dark/50`}
                         />
                     </div>
                 </div>
             </div>
 
-            {/* Table */}
             <div className={`w-full bg-neutral rounded-sm shadow-md overflow-hidden`}>
-                {/* Table head */}
                 <div className={`${HEAD_GRID} bg-light px-8 py-5 text-base text-dark/70`}>
                     <div>صورة المنتج</div>
                     <div>اسم المنتج والتصنيف</div>
@@ -409,7 +529,6 @@ export default function ProductManagement() {
                     <div>الإجراءات</div>
                 </div>
 
-                {/* Rows */}
                 {visible.length === 0 ? (
                     <div className={`w-full py-20 text-center text-base text-dark/70`}>
                         لا توجد منتجات مطابقة
@@ -417,18 +536,18 @@ export default function ProductManagement() {
                 ) : (
                     visible.map((product) => (
                         <ProductRow
-                            key={product.id}
+                            key={product._id}
                             product={product}
-                            onEdit={handleEdit}
+                            categoryName={categoryNameOf(product)}
+                            onEdit={openEditProduct}
                             onDelete={requestDelete}
                         />
                     ))
                 )}
 
-                {/* Pagination */}
                 <div className={`w-full flex flex-col sm:flex-row items-center justify-between gap-4 bg-light px-4 md:px-8 py-5`}>
                     <div className={`text-base text-dark/70 text-center`}>
-                        عرض {visible.length} من أصل {filtered.length} منتج مضاف
+                        عرض {visible.length} من أصل {total} منتج مضاف
                     </div>
 
                     <div className={`flex flex-wrap items-center justify-center gap-2`}>
@@ -454,7 +573,6 @@ export default function ProductManagement() {
                 </div>
             </div>
 
-            {/* Undo toast */}
             {undoName && (
                 <div
                     role="status"
@@ -473,7 +591,6 @@ export default function ProductManagement() {
                 </div>
             )}
 
-            {/* Delete confirmation */}
             {pendingDelete && (
                 <ConfirmDialog
                     name={pendingDelete.name}
@@ -481,6 +598,33 @@ export default function ProductManagement() {
                     onCancel={() => setPendingDelete(null)}
                 />
             )}
+
+            <ProductFormModal
+                open={productModal}
+                onClose={() => setProductModal(false)}
+                product={editingProduct}
+                categories={categories}
+                onSaved={handleProductSaved}
+            />
+
+            <CategoryFormModal
+                open={categoryModal}
+                onClose={() => setCategoryModal(false)}
+                category={editingCategory}
+                onSaved={handleCategorySaved}
+            />
+
+            <ManageCategoriesModal
+                open={manageModal}
+                onClose={() => setManageModal(false)}
+                categories={categories}
+                counts={countsById}
+                onEdit={(c) => {
+                    setManageModal(false)
+                    openEditCategory(c)
+                }}
+                onDeleted={handleCategoryDeleted}
+            />
         </main>
     )
 }
@@ -529,53 +673,53 @@ function ConfirmDialog({ name, onConfirm, onCancel }) {
     )
 }
 
-function ProductRow({ product, onEdit, onDelete }) {
+function ProductRow({ product, categoryName, onEdit, onDelete }) {
+    const options = product.priceOptions || []
+    const minPrice = options.length ? Math.min(...options.map((o) => o.value)) : null
+
     return (
         <div className={`${ROW_GRID} px-4 md:px-8 py-5 border-b border-light`}>
-            {/* Image */}
             <img
-                src={product.image}
+                src={product.image || cakeSample}
                 alt={product.name}
                 className={`w-20 h-20 rounded-sm object-cover`}
             />
 
-            {/* Name + category */}
             <div className={`min-w-0 flex flex-col items-start gap-2`}>
                 <div className={`text-md text-dark font-semibold`}>
                     {product.name}
                 </div>
                 <div className={`text-sm text-dark/70`}>
-                    {categoryNames[product.category]} • {product.details}
-                    {product.serves ? ` • ${product.serves}` : ``}
+                    {categoryName}
+                    {product.subcategory ? ` • ${product.subcategory}` : ``}
+                    {options.length > 1 ? ` • ${options.length} خيارات` : ``}
                 </div>
             </div>
 
-            {/* Price, likes, actions: one row on mobile, three grid columns on desktop */}
             <div className={`col-span-2 flex items-center justify-between gap-3 xl:contents`}>
-                {/* Price */}
                 <div className={`text-md text-dark font-semibold`}>
-                    د.أ {product.price.toFixed(2)}
+                    {minPrice === null
+                        ? `—`
+                        : `${options.length > 1 ? `من ` : ``}د.أ ${Number(minPrice).toFixed(2)}`}
                 </div>
 
-                {/* Likes */}
                 <div>
-                <span className={`inline-flex items-center gap-2 bg-light text-dark text-base font-semibold px-3 py-1 rounded-sm`}>
-                    {product.likes}
-                    <Heart size={16} />
-                </span>
+                    <span className={`inline-flex items-center gap-2 bg-light text-dark text-base font-semibold px-3 py-1 rounded-sm`}>
+                        {likesOf(product)}
+                        <Heart size={16} />
+                    </span>
                 </div>
 
-                {/* Actions */}
                 <div className={`flex items-center gap-3`}>
                     <button
-                        onClick={() => onEdit(product.id)}
+                        onClick={() => onEdit(product)}
                         className={`flex items-center gap-2 bg-light text-dark text-sm font-semibold px-3 py-2 rounded-sm cursor-pointer`}
                     >
                         <Pencil size={16} />
                         <span>تعديل</span>
                     </button>
                     <button
-                        onClick={() => onDelete(product.id)}
+                        onClick={() => onDelete(product)}
                         className={`text-dark cursor-pointer`}
                         aria-label="حذف"
                     >

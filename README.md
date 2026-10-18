@@ -39,7 +39,7 @@ mern-project/
 2. On your Cloudinary **Dashboard**, copy your **Cloud name**, **API Key**, and **API Secret**.
 3. Paste them into `server/.env` as `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
 
-The server is already set up with `multer-storage-cloudinary` so uploads go straight to Cloudinary — see `server/src/config/cloudinary.js` and `POST /api/upload`.
+Uploads go directly to Cloudinary through the protected `POST /api/upload` endpoint. Only authenticated users configured in `ADMIN_EMAILS` can upload images or manage categories and products.
 
 ## 3. Google OAuth setup
 
@@ -58,18 +58,20 @@ The flow is already wired: clicking "Sign in with Google" on the client hits `GE
 **Server:**
 ```bash
 cd server
-cp .env .env   # then fill in the real values
+cp .env.example .env   # then fill in the real values
 npm run dev
 ```
 
 **Client:**
 ```bash
 cd client
-cp .env .env   # defaults should work as-is for local dev
+cp .env.example .env
 npm run dev
 ```
 
 Client runs on `http://localhost:5173`, server on `http://localhost:5000`.
+
+The API is mounted at `/api`. Public endpoints include `GET /api/categories`, `GET /api/products`, and `GET /api/health`. Google sign-in is handled by `/api/auth/google`; product/category mutations and image uploads require an admin account. Set `ADMIN_EMAILS` to a comma-separated list of Google account emails to grant admin access.
 
 ## 5. Pushing to GitHub
 

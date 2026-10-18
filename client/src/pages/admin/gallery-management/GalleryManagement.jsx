@@ -1,48 +1,65 @@
+// src/pages/admin/gallery-management/GalleryManagement.jsx
 import { useEffect, useRef, useState } from "react"
-import { Check, CloudUpload, ImagePlus, Trash2, Undo2 } from "lucide-react"
-import { cakeSample } from "@/assets/assets.js"
+import { Check, ChevronLeft, ChevronRight, CloudUpload, ImagePlus, Trash2, Undo2 } from "lucide-react"
+import { getGalleryImages, uploadGalleryImage, deleteGalleryImages } from "@/api/galleryService.js"
 
 const ACCEPTED_TYPES = ["image/png", "image/jpeg"]
 const MAX_SIZE_MB = 10
-const UNDO_MS = 5000 // how long the "undo" toast stays visible
+const UNDO_MS = 5000
+const PAGE_SIZE = 12
 
-// Page side padding: small on phones, your original px-50 on large screens
 const PAGE_PX = `px-4 md:px-8 lg:px-12 xl:px-50`
 
-// Mock data: the admin only uploads images, so an image is just { id, src }
-// (newest first)
-const initialImages = Array.from({ length: 8 }, (_, i) => ({
-    id: `mock-${i + 1}`,
-    src: cakeSample,
-}))
-
 export default function GalleryManagement() {
-    const [images, setImages] = useState(initialImages)
+    const [images, setImages] = useState([])
+    const [total, setTotal] = useState(0)
+    const [pages, setPages] = useState(1)
+    const [page, setPage] = useState(1)
+    const [reloadKey, setReloadKey] = useState(0)
+    const [loading, setLoading] = useState(true)
+    const [loadError, setLoadError] = useState("")
     const [selected, setSelected] = useState(() => new Set())
     const [isDragging, setIsDragging] = useState(false)
     const [errors, setErrors] = useState([])
-    const [pendingDelete, setPendingDelete] = useState(null) // ids waiting for confirmation
+    const [pendingDelete, setPendingDelete] = useState(null)
+    const [uploading, setUploading] = useState(false)
+    const [progress, setProgress] = useState({ done: 0, total: 0 })
 
     const inputRef = useRef(null)
-    const imagesRef = useRef(images) // latest images, used to clean up object URLs on unmount
-    imagesRef.current = images
-
-    // Undo: deleted images wait here until the toast expires
-    const undoRef = useRef(null)      // [{ img, index }] (the real data)
+    const undoRef = useRef(null)
     const timerRef = useRef(null)
-    const [undoCount, setUndoCount] = useState(0) // only drives the toast (0 = hidden)
+    const [undoCount, setUndoCount] = useState(0)
 
-    // Free the temporary URLs created for newly uploaded files
+    useEffect(() => {
+        const controller = new AbortController()
+        getGalleryImages({ page, limit: PAGE_SIZE }, { signal: controller.signal })
+            .then((res) => {
+                const list = res.data.images || []
+                if (list.length === 0 && page > 1) {
+                    setPage(page - 1)
+                    return
+                }
+                setImages(list)
+                setTotal(res.data.total || 0)
+                setPages(res.data.pages || 1)
+                setLoadError("")
+            })
+            .catch((err) => {
+                if (err.code === "ERR_CANCELED") return
+                setLoadError(err.response?.data?.message || "تعذر تحميل الصور")
+            })
+            .finally(() => {
+                if (!controller.signal.aborted) setLoading(false)
+            })
+        return () => controller.abort()
+    }, [page, reloadKey])
+
     useEffect(() => {
         return () => {
             clearTimeout(timerRef.current)
-            imagesRef.current.forEach((img) => {
-                if (img.isLocal) URL.revokeObjectURL(img.src)
-            })
-            undoRef.current?.forEach(({ img }) => {
-                if (img.isLocal) URL.revokeObjectURL(img.src)
-            })
-            // TODO: if undoRef.current still has items here, send their delete request now
+            if (undoRef.current) {
+                deleteGalleryImages(undoRef.current.map(({ img }) => img._id)).catch(() => {})
+            }
         }
     }, [])
 
@@ -53,10 +70,35 @@ export default function GalleryManagement() {
         return () => document.removeEventListener("keydown", onKey)
     }, [pendingDelete])
 
-    const allSelected = images.length > 0 && selected.size === images.length
+    const totalPages = Math.max(1, pages)
+    const allSelected = images.length > 0 && images.every((img) => selected.has(img._id))
 
-    // Upload
+    const changePage = (n) => {
+        setSelected(new Set())
+        setPage(n)
+    }
+
+    const uploadFiles = async (files) => {
+        setUploading(true)
+        setProgress({ done: 0, total: files.length })
+        const failed = []
+        for (const file of files) {
+            try {
+                await uploadGalleryImage(file)
+            } catch (err) {
+                failed.push(`${file.name}: ${err.response?.data?.message || "فشل الرفع"}`)
+            }
+            setProgress((p) => ({ ...p, done: p.done + 1 }))
+        }
+        if (failed.length) setErrors((prev) => [...prev, ...failed])
+        setUploading(false)
+        setSelected(new Set())
+        setPage(1)
+        setReloadKey((k) => k + 1)
+    }
+
     const addFiles = (fileList) => {
+        if (uploading) return
         const valid = []
         const rejected = []
 
@@ -66,22 +108,17 @@ export default function GalleryManagement() {
             } else if (file.size > MAX_SIZE_MB * 1024 * 1024) {
                 rejected.push(`${file.name}: الحجم أكبر من ${MAX_SIZE_MB}MB`)
             } else {
-                // TODO: send `file` to the backend (FormData) and use the returned URL as `src`
-                valid.push({
-                    id: crypto.randomUUID(),
-                    src: URL.createObjectURL(file),
-                    isLocal: true,
-                })
+                valid.push(file)
             }
         })
 
         setErrors(rejected)
-        if (valid.length) setImages((prev) => [...valid, ...prev])
+        if (valid.length) uploadFiles(valid)
     }
 
     const handleInputChange = (e) => {
         addFiles(e.target.files)
-        e.target.value = "" // lets the admin pick the same file again
+        e.target.value = ""
     }
 
     const handleDrop = (e) => {
@@ -90,9 +127,10 @@ export default function GalleryManagement() {
         addFiles(e.dataTransfer.files)
     }
 
-    const openPicker = () => inputRef.current?.click()
+    const openPicker = () => {
+        if (!uploading) inputRef.current?.click()
+    }
 
-    // Selection
     const toggleOne = (id) => {
         setSelected((prev) => {
             const next = new Set(prev)
@@ -102,35 +140,46 @@ export default function GalleryManagement() {
     }
 
     const toggleAll = () => {
-        setSelected(allSelected ? new Set() : new Set(images.map((img) => img.id)))
+        setSelected(allSelected ? new Set() : new Set(images.map((img) => img._id)))
     }
 
-    // Delete (with undo)
-    // The image leaves the screen immediately, but it is only "really" deleted
-    // when the toast expires (finalizeDelete). Until then it can be restored.
+    const restoreItems = (items) => {
+        setImages((prev) => {
+            const next = [...prev]
+            ;[...items]
+                .sort((x, y) => x.index - y.index)
+                .forEach(({ img, index }) => next.splice(Math.min(index, next.length), 0, img))
+            return next
+        })
+        setTotal((t) => t + items.length)
+    }
+
     const finalizeDelete = () => {
         clearTimeout(timerRef.current)
         const items = undoRef.current
         if (!items) return
-
-        items.forEach(({ img }) => {
-            if (img.isLocal) URL.revokeObjectURL(img.src)
-        })
-        // TODO: call the delete endpoint with items.map(({ img }) => img.id)
-
         undoRef.current = null
         setUndoCount(0)
+
+        deleteGalleryImages(items.map(({ img }) => img._id))
+            .then(() => setReloadKey((k) => k + 1))
+            .catch((err) => {
+                restoreItems(items)
+                setErrors([err.response?.data?.message || "تعذر حذف الصور"])
+            })
     }
 
     const removeImages = (ids) => {
-        finalizeDelete() // a previous delete that is still waiting becomes final
+        finalizeDelete()
 
         const idSet = new Set(ids)
         const items = images
             .map((img, index) => ({ img, index }))
-            .filter(({ img }) => idSet.has(img.id))
+            .filter(({ img }) => idSet.has(img._id))
+        if (items.length === 0) return
 
-        setImages((prev) => prev.filter((img) => !idSet.has(img.id)))
+        setImages((prev) => prev.filter((img) => !idSet.has(img._id)))
+        setTotal((t) => Math.max(0, t - items.length))
         setSelected((prev) => new Set([...prev].filter((id) => !idSet.has(id))))
 
         undoRef.current = items
@@ -142,16 +191,7 @@ export default function GalleryManagement() {
         const items = undoRef.current
         if (!items) return
         clearTimeout(timerRef.current)
-
-        // Put every image back at its old position (lowest index first)
-        setImages((prev) => {
-            const next = [...prev]
-            ;[...items]
-                .sort((x, y) => x.index - y.index)
-                .forEach(({ img, index }) => next.splice(Math.min(index, next.length), 0, img))
-            return next
-        })
-
+        restoreItems(items)
         undoRef.current = null
         setUndoCount(0)
     }
@@ -163,9 +203,24 @@ export default function GalleryManagement() {
         setPendingDelete(null)
     }
 
+    if (loading) {
+        return (
+            <main className={`w-full min-h-screen flex items-center justify-center bg-background`}>
+                <p className={`text-base text-dark/70`}>جاري التحميل...</p>
+            </main>
+        )
+    }
+
+    if (loadError && images.length === 0) {
+        return (
+            <main className={`w-full min-h-screen flex items-center justify-center bg-background`}>
+                <p className={`text-base text-dark`}>{loadError}</p>
+            </main>
+        )
+    }
+
     return (
         <main className={`w-full min-h-screen flex flex-col items-start gap-6 md:gap-8 ${PAGE_PX} py-6 md:py-10 bg-background`}>
-            {/* Header */}
             <div className={`w-full flex flex-col md:flex-row md:items-center justify-between gap-6 bg-neutral rounded-sm shadow-md p-5 md:p-10`}>
                 <div className={`flex flex-col items-start gap-3`}>
                     <div className={`flex flex-wrap items-center gap-3 md:gap-4`}>
@@ -173,7 +228,7 @@ export default function GalleryManagement() {
                             إدارة صور المعرض
                         </div>
                         <span className={`bg-light text-dark text-sm font-semibold px-3 py-1 rounded-sm`}>
-                            {images.length} صورة في المعرض
+                            {total} صورة في المعرض
                         </span>
                     </div>
                     <p className={`text-base text-dark/70`}>
@@ -183,14 +238,16 @@ export default function GalleryManagement() {
 
                 <button
                     onClick={openPicker}
-                    className={`w-full md:w-auto flex items-center justify-center gap-2 bg-dark text-white text-base font-semibold px-6 py-4 rounded-sm shadow-md cursor-pointer`}
+                    disabled={uploading}
+                    className={`w-full md:w-auto flex items-center justify-center gap-2 bg-dark text-white text-base font-semibold px-6 py-4 rounded-sm shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-default`}
                 >
                     <ImagePlus size={20} />
-                    <span>رفع صورة جديدة للمعرض</span>
+                    <span>
+                        {uploading ? `جاري الرفع (${progress.done}/${progress.total})` : `رفع صورة جديدة للمعرض`}
+                    </span>
                 </button>
             </div>
 
-            {/* Dropzone */}
             <div
                 role="button"
                 tabIndex={0}
@@ -204,13 +261,12 @@ export default function GalleryManagement() {
                 onDrop={handleDrop}
                 className={`w-full flex flex-col items-center justify-center gap-4 px-4 py-12 md:py-20 text-center rounded-sm cursor-pointer border-2 border-dashed transition-colors ${
                     isDragging ? `bg-neutral border-dark` : `bg-light border-transparent`
-                }`}
+                } ${uploading ? `opacity-60` : ``}`}
             >
                 <div className={`bg-neutral rounded-[10px] p-4`}>
                     <CloudUpload size={40} className={`text-dark`} />
                 </div>
                 <div className={`text-md text-dark font-semibold`}>
-                    {/* Phones have no drag & drop, so they get a shorter text */}
                     <span className={`md:hidden`}>اضغطي لاختيار الصور من جهازك</span>
                     <span className={`hidden md:inline`}>اسحبي الصور هنا لرفعها مباشرة، أو اضغطي للتصفح</span>
                 </div>
@@ -228,16 +284,14 @@ export default function GalleryManagement() {
                 />
             </div>
 
-            {/* Upload errors */}
             {errors.length > 0 && (
                 <div className={`w-full flex flex-col gap-1 bg-neutral border border-red-300 rounded-[10px] p-4 text-sm text-red-700`}>
-                    {errors.map((err) => (
-                        <span key={err}>{err}</span>
+                    {errors.map((err, i) => (
+                        <span key={`${err}-${i}`}>{err}</span>
                     ))}
                 </div>
             )}
 
-            {/* Toolbar */}
             <div className={`w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
                 <div className={`flex flex-wrap items-center gap-4 md:gap-6`}>
                     <button
@@ -265,26 +319,56 @@ export default function GalleryManagement() {
                 </div>
             </div>
 
-            {/* Grid */}
             {images.length === 0 ? (
                 <div className={`w-full py-20 text-center text-base text-dark/70`}>
                     لا توجد صور في المعرض بعد
                 </div>
             ) : (
-                <div className={`w-full grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 xl:gap-8 pb-10`}>
+                <div className={`w-full grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 xl:gap-8`}>
                     {images.map((img) => (
                         <GalleryCard
-                            key={img.id}
+                            key={img._id}
                             image={img}
-                            isSelected={selected.has(img.id)}
-                            onToggle={() => toggleOne(img.id)}
-                            onDelete={() => setPendingDelete([img.id])}
+                            isSelected={selected.has(img._id)}
+                            onToggle={() => toggleOne(img._id)}
+                            onDelete={() => setPendingDelete([img._id])}
                         />
                     ))}
                 </div>
             )}
 
-            {/* Undo toast */}
+            {totalPages > 1 && (
+                <div className={`w-full flex flex-wrap items-center justify-center gap-2 pb-10`}>
+                    <button
+                        onClick={() => changePage(Math.max(1, page - 1))}
+                        disabled={page === 1}
+                        aria-label="الصفحة السابقة"
+                        className={`w-10 h-10 flex items-center justify-center text-dark cursor-pointer disabled:opacity-40 disabled:cursor-default`}
+                    >
+                        <ChevronRight size={18} />
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                        <button
+                            key={n}
+                            onClick={() => changePage(n)}
+                            className={`w-10 h-10 rounded-sm text-base font-semibold cursor-pointer ${
+                                n === page ? `bg-dark text-white` : `bg-light text-dark/70`
+                            }`}
+                        >
+                            {n}
+                        </button>
+                    ))}
+                    <button
+                        onClick={() => changePage(Math.min(totalPages, page + 1))}
+                        disabled={page === totalPages}
+                        aria-label="الصفحة التالية"
+                        className={`w-10 h-10 flex items-center justify-center text-dark cursor-pointer disabled:opacity-40 disabled:cursor-default`}
+                    >
+                        <ChevronLeft size={18} />
+                    </button>
+                </div>
+            )}
+
             {undoCount > 0 && (
                 <div
                     role="status"
@@ -303,7 +387,6 @@ export default function GalleryManagement() {
                 </div>
             )}
 
-            {/* Delete confirmation */}
             {pendingDelete && (
                 <ConfirmDialog
                     count={pendingDelete.length}
@@ -382,10 +465,9 @@ function GalleryCard({ image, isSelected, onToggle, onDelete }) {
                 isSelected ? `ring-2 ring-dark` : ``
             }`}
         >
-            {/* Image + checkbox */}
             <div className={`relative w-full aspect-square`}>
                 <img
-                    src={image.src}
+                    src={image.image}
                     alt="صورة من المعرض"
                     className={`w-full h-full object-cover`}
                 />
@@ -397,7 +479,6 @@ function GalleryCard({ image, isSelected, onToggle, onDelete }) {
                     <Checkbox checked={isSelected} />
                 </button>
 
-                {/* Floating delete button */}
                 <button
                     onClick={onDelete}
                     className={`absolute top-2 left-2 md:top-3 md:left-3 w-9 h-9 flex items-center justify-center bg-neutral text-red-600 rounded-full shadow-md cursor-pointer`}
