@@ -13,7 +13,12 @@ const Categories = () => {
         getCategories(undefined, { signal: controller.signal })
             .then((res) => {
                 const data = res.data
-                setCategories(Array.isArray(data) ? data : data?.categories || [])
+                const list = Array.isArray(data) ? data : data?.categories || []
+
+                const sortedList = [...list].sort(
+                    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+                )
+                setCategories(sortedList)
             })
             .catch((err) => {
                 if (err.code === "ERR_CANCELED") return
