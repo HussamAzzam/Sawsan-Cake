@@ -2,7 +2,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import AdminLayout from "../components/AdminLayout";
-import { AdminRoute } from "../components/RouteGuards.jsx";
+import { AdminRoute, ProtectedRoute } from "../components/RouteGuards.jsx";
 
 // User Pages
 import Home from "../pages/user/home/Home";
@@ -11,6 +11,7 @@ import ContactUs from "../pages/user/contact-us/ContactUs";
 import Gallery from "../pages/user/gallery/Gallery";
 import Menu from "../pages/user/menu/Menu";
 import LoginPage from "../pages/user/login/LoginPage";
+import Profile from "../pages/user/profile/Profile";
 import CategoryProducts from "../pages/user/category-products/CategoryProducts";
 
 // Admin Pages
@@ -35,6 +36,9 @@ export default function AppRoutes() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/contact" element={<Navigate to="/contact-us" replace />} />
         <Route path="/category/:slug" element={<CategoryProducts />} />
+        <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Profile />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
 

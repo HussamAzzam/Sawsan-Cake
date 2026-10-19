@@ -25,3 +25,20 @@ export async function toggleLike(userId, productId) {
         throw error;
     }
 }
+
+export async function listLikedProducts(userId, query) {
+    const page = Math.max(Number.parseInt(query.page, 10) || 1, 1);
+    const limit = Math.min(Math.max(Number.parseInt(query.limit, 10) || 12, 1), 50);
+
+    const [likes, total] = await Promise.all([
+        Like.find({ user: userId })
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .populate({ path: "product", populate: { path: "category", select: "slug name" } }),
+        Like.countDocuments({ user: userId }),
+    ]);
+
+    const products = likes.map((like) => like.product).filter(Boolean);
+    return { products, page, pages: Math.ceil(total / limit), total };
+}

@@ -1,12 +1,15 @@
+// src/components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { usePanel } from "@/context/PanelContext";
 
-import { Menu, X } from "lucide-react"
+import UserAvatar from "@/components/UserAvatar.jsx";
+
+import { LayoutDashboard, Menu, X } from "lucide-react"
 
 export default function Navbar() {
-  const { user, loginWithGoogle, logout } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { activeIndex } = usePanel();
   const location = useLocation();
 
@@ -14,13 +17,11 @@ export default function Navbar() {
 
   const isHomePage = location.pathname === "/";
 
-
-// inside Navbar()
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setHasScrolled(window.scrollY > 800);
-    onScroll(); // sync on mount / route change (e.g. page restored mid-scroll)
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [location.pathname]);
@@ -42,14 +43,7 @@ export default function Navbar() {
           `}>
         <div className=" lg:px-5 w-full">
           <div className="relative flex h-16 w-full">
-            {/* Mobile version */}
             <div className={`lg:hidden w-full flex items-center justify-between px-5`}>
-              {/*<a
-                  href={`/login`}
-                  className={`btn text-sm px-2`}
-              >
-                سجل
-              </a>*/}
               <a
                   href={`/`}
                   className={`text-lg font-bold text-neutral font-heading`}
@@ -57,20 +51,18 @@ export default function Navbar() {
                 سوسن كيك
               </a>
 
-              <div
-                onClick={() => setIsMobileMenuOpen(prev => !prev)}
-              >
-
-                <Menu
-                    size={24}
-                    className={`text-neutral`}
-                />
+              <div className={`flex items-center gap-4`}>
+                {user && <UserAvatar user={user} size="w-8 h-8" />}
+                <div onClick={() => setIsMobileMenuOpen(prev => !prev)}>
+                  <Menu
+                      size={24}
+                      className={`text-neutral`}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Desktop version*/}
             <div className="hidden  lg:flex items-center w-full">
-              {/* Desktop Navigation Links + Brand Logo */}
               <div className="hidden w-full md:flex  items-center justify-between  space-x-1 lg:space-x-4">
                 <Link
                     to="/"
@@ -97,27 +89,19 @@ export default function Navbar() {
                   </NavLink>
                 </div>
 
-                {/* Top Left: Sign In / User Button (Desktop) */}
                 <div className="flex items-center z-10">
                   {user ? (
-                      <div className="flex items-center gap-2">
-                        {user.avatar && (
-                            <img
-                                src={user.avatar}
-                                alt={user.name || "User"}
-                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-pink-200 object-cover"
-                            />
+                      <div className="flex items-center gap-3">
+                        {isAdmin && (
+                            <Link
+                                to="/admin/dashboard"
+                                className="flex items-center gap-2 text-sm font-bold px-3 py-1.5 rounded-md bg-transparent text-neutral border-2 border-neutral transition-colors"
+                            >
+                              <LayoutDashboard size={16} />
+                              <span>لوحة التحكم</span>
+                            </Link>
                         )}
-                        <span className="hidden sm:inline text-xs font-medium text-gray-700">
-                  {user.name}
-                </span>
-                        <button
-                            onClick={logout}
-                            type="button"
-                            className="text-sm font-bold px-3 py-1.5  rounded-md bg-transparent text-neutral border-2 border-neutral  transition-colors cursor-pointer"
-                        >
-                          تسجيل الخروج
-                        </button>
+                           <Link to="/profile"><UserAvatar user={user} size="w-9 h-9" /></Link>
                       </div>
                   ) : (
                       <Link
@@ -130,13 +114,10 @@ export default function Navbar() {
                   )}
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
             <div
                 dir="rtl"
@@ -206,44 +187,35 @@ export default function Navbar() {
                   تواصل معنا
                 </NavLink>
 
-                {/* Mobile Auth Button */}
-                <div className="pt-2 border-t border-gray-100">
+                <div className="w-full pt-2 border-t border-gray-100">
                   {user ? (
-                      <div className="flex items-center justify-between px-3 py-2">
-                        <div className="flex items-center gap-2">
-                          {user.avatar && (
-                              <img
-                                  src={user.avatar}
-                                  alt={user.name || "User"}
-                                  className="w-7 h-7 rounded-full border border-pink-200 object-cover"
-                              />
-                          )}
-                          <span className="text-sm font-medium text-gray-700">{user.name}</span>
-                        </div>
-                        <button
-                            onClick={() => {
-                              logout();
-                              setIsMobileMenuOpen(false);
-                            }}
-                            type="button"
-                            className="text-xs text-pink-600 hover:underline cursor-pointer"
-                        >
-                          تسجيل الخروج
-                        </button>
-                      </div>
+                      isAdmin && (
+                          <Link
+                              to="/admin/dashboard"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="flex items-center gap-2 px-3 py-2 text-base font-medium text-pink-600 hover:bg-pink-50 rounded-md transition-colors"
+                          >
+                            <LayoutDashboard size={18} />
+                            <span>لوحة التحكم</span>
+                          </Link>
+                      )
                   ) : (
-                      <a
-                          href={`/login`}
+                      <Link
+                          to={`/login`}
+                          onClick={() => setIsMobileMenuOpen(false)}
                           className="w-full text-right block px-3 py-2 text-base font-medium text-pink-600 hover:bg-pink-50 rounded-md cursor-pointer transition-colors"
                       >
                         تسجيل الدخول
-                      </a>
+                      </Link>
                   )}
                 </div>
               </div>
-
             </div>
         )}
       </nav>
   );
 }
+
+
+
+

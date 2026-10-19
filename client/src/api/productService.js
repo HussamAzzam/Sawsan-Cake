@@ -8,3 +8,4 @@ export const updateProduct = (id, data) => api.patch(`/products/${id}`, data);
 export const deleteProduct = (id) => api.delete(`/products/${id}`);
 export const getLikeStatus = (productId) => api.get(`/products/${productId}/like`);
 export const toggleLike = (productId) => api.post(`/products/${productId}/like`);
+export const getLikedProducts = (params, config) => api.get("/products/liked", { params, ...config });

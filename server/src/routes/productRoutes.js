@@ -1,11 +1,12 @@
 import { Router } from "express";
 import * as controller from "../controllers/productController.js";
-import { requireAdmin, requireAuth } from "../middleware/auth.js";
+import { requireAdmin, requireAuth, optionalAuth } from "../middleware/auth.js";
 import * as likeController from "../controllers/likeController.js";
 
 const router = Router();
 
-router.get("/", controller.list);
+router.get("/", optionalAuth, controller.list);
+router.get("/liked", requireAuth, likeController.listLiked);
 router.get("/:productId/like", requireAuth, likeController.status);
 router.post("/:productId/like", requireAuth, likeController.toggle);
 router.get("/:id", controller.get);
