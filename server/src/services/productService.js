@@ -90,6 +90,11 @@ async function validateCategory(categoryId, subcategory) {
     }
 }
 
+export async function createProduct(data) {
+    await validateCategory(data.category, data.subcategory);
+    return Product.create(data);
+}
+
 export async function updateProduct(id, data) {
     const existing = await Product.findById(id);
     if (!existing) throw new AppError("Product not found", 404);
