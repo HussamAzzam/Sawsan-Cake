@@ -26,6 +26,7 @@ app.use(cors({
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(passport.initialize());
+app.set("trust proxy", 1);
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/auth/google", rateLimit({ windowMs: 15 * 60 * 1000, limit: 30 }))
