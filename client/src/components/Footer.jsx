@@ -21,31 +21,31 @@ export default function Footer() {
             <div className={`flex items-start gap-20`}>
               {/* Quick links */}
               <div className={`flex flex-col gap-4`}>
-                <a href="" className={`text-neutral font-bold hover:text-neutral transition-all ease-in-out duration-100`}>
+                <Link to="/" className={`text-neutral font-bold hover:text-neutral transition-all ease-in-out duration-100`}>
                   الرئيسية
-                </a>
-                <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                </Link>
+                <Link to="/menu" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
                   القائمة
-                </a>
-                <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                </Link>
+                <Link to="/gallery" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
                   المعرض
-                </a>
-                <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                </Link>
+                <Link to="/about-us" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
                   من نحن
-                </a>
-                <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+                </Link>
+                <Link to="/contact-us" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
                   تواصل معنا
-                </a>
+                </Link>
               </div>
 
               {/* Login */}
               <div className={`flex flex-col gap-4`}>
-                <a className={`text-neutral/50 font-bold hover:text-neutral transition-all ease-in-out duration-100 cursor-pointer`}>
+                <Link
+                 to="/login"
+                 className={`text-neutral/50 font-bold hover:text-neutral transition-all ease-in-out duration-100 cursor-pointer`}>
                   تسجيل الدخول
-                </a>
-                <a className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100 cursor-pointer`}>
-                  إنشاء حساب
-                </a>
+                </Link>
+              
               </div>
             </div>
 
@@ -53,13 +53,13 @@ export default function Footer() {
             <div className={`flex gap-20`}>
               {/* Contact */}
               <div className={`flex flex-col gap-4`}>
-                <a href="mailto:sawsancake@gmail.com" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <a href="mailto:sawsanprofile@gmail.com" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
                   <Mail size={18} />
-                  sawsancake@gmail.com
+                  sawsanprofile@gmail.com
                 </a>
-                <a href="tel:+962000000000" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <a href="tel:+962779717313" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
                   <Phone size={18} />
-                  +962 xxx xxx xxx
+                  0779717313
                 </a>
                 <div className={`flex items-center gap-2 text-neutral/50`} dir={`ltr`}>
                   <MapPin size={18} />
@@ -69,15 +69,15 @@ export default function Footer() {
 
               {/* Socials */}
               <div className={`flex flex-col gap-4`}>
-                <a href="" className={`flex items-center gap-2 text-neutral/50 font-bold hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <a href="https://youtube.com/@sawsanqdaisat?si=nzKdHEUO7RN5L9c3" className={`flex items-center gap-2 text-neutral/50 font-bold hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
                   <SiYoutube size={18} />
                   YouTube
                 </a>
-                <a href="" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <a href="https://www.facebook.com/share/1JEE4d4im9/" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
                   <SiFacebook size={18} />
                   Facebook
                 </a>
-                <a href="" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
+                <a href="https://www.instagram.com/sawsan_cake_irbid?dlrf=emtheTl0aXJ4djJk" className={`flex items-center gap-2 text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`} dir={`ltr`}>
                   <SiInstagram size={18} />
                   Instagram
                 </a>
@@ -131,28 +131,28 @@ export default function Footer() {
 
           {/* Navigation Links */}
           <div className={`w-full flex items-center justify-between text-sm border-b-2 border-gray/50 pb-10`}>
-            <a href="" className={`text-neutral font-bold hover:text-neutral transition-all ease-in-out duration-100`}>
+            <Link to="/" className={`text-neutral font-bold hover:text-neutral transition-all ease-in-out duration-100`}>
               الرئيسية
-            </a>
-            <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+            </Link>
+            <Link to="/menu" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
               القائمة
-            </a>
-            <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+            </Link>
+            <Link to="/gallery" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
               المعرض
-            </a>
-            <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+            </Link>
+            <Link to="/about-us" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
               من نحن
-            </a>
-            <a href="" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
+            </Link>
+            <Link to="/contact-us" className={`text-neutral/50 hover:text-neutral transition-all ease-in-out duration-100`}>
               تواصل معنا
-            </a>
+            </Link>
           </div>
 
           {/* Contact Info */}
           <div className={`w-full flex flex-col items-center gap-5 border-b-2 border-gray/50 pb-10`}>
             <div className={`w-full flex items-center justify-center text-sm gap-5`}>
               <a
-                  href=""
+                  href="tel:+962779717313"
                   className={`bg-white/10 border border-neutral/15 py-3 px-6 rounded-[10px] flex items-center gap-2 `}
               >
                 <Phone size={15} />
@@ -161,7 +161,7 @@ export default function Footer() {
                 </span>
               </a>
               <a
-                  href=""
+                  href="mailto:sawsanprofile@gmail.com"
                   className={`bg-white/10 border border-neutral/15 py-3 px-6 rounded-[10px] flex items-center gap-2`}
               >
                 <Mail size={15} />
@@ -178,15 +178,21 @@ export default function Footer() {
           {/* Social Media */}
           <div className={`w-full flex items-center justify-between border-b-2 border-gray/50 pb-10`}>
             <div className={`flex items-center gap-2`}>
-              <div className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}>
+              <a
+               href="https://www.instagram.com/sawsan_cake_irbid?dlrf=emtheTl0aXJ4djJk" 
+               className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}>
                 <SiInstagram size={20} />
-              </div>
-              <div className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}>
+              </a>
+              <a 
+               href="https://youtube.com/@sawsanqdaisat?si=nzKdHEUO7RN5L9c3"
+               className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}>
                 <SiYoutube size={20} />
-              </div>
-              <div className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}>
+              </a>
+              <a 
+               href="https://www.facebook.com/share/1JEE4d4im9/"
+               className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}>
                 <SiFacebook size={20} />
-              </div>
+              </a>
             </div>
             <div
                 className={`flex items-center justify-center bg-white/10 p-4 rounded-full`}

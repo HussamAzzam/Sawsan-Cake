@@ -6,27 +6,27 @@ const contactInfo = [
         icon: Phone,
         iconBg: "bg-light text-primary",
         label: "رقم الهاتف",
-        value: "065001888",
+        value: "0779717313",
         dir: "ltr",
     },
     {
         icon: Mail,
         iconBg: "bg-secondary-light text-tertiary",
         label: "البريد الإلكتروني",
-        value: "support@sawsancake.jo",
+        value: "sawsanprofile@gmail.com",
         dir: "ltr",
     },
     {
         icon: MapPin,
         iconBg: "bg-light text-primary",
         label: "العنوان",
-        value: "عمّان، الأردن",
+        value: "اربد - الرهبات - طريق الحصن خلف مجمع توب تن",
     },
     {
         icon: Clock,
         iconBg: "bg-secondary-light text-tertiary",
         label: "ساعات العمل",
-        value: "يومياً: ٨ص - ١١م",
+        value: "كل الايام ما عدا الجمعه : من 8 صباحا - 3 مساء",
     },
 ];
 
@@ -143,12 +143,10 @@ export default function ContactUs() {
                 <div className="mt-8 overflow-hidden rounded-2xl bg-neutral p-5 shadow-sm">
                     <p className="mb-4 text-sm font-semibold text-dark">موقعنا</p>
                     <div className="h-72 w-full overflow-hidden rounded-xl">
-                        <iframe
-                            title="موقعنا"
-                            className="h-full w-full border-0"
-                            loading="lazy"
-                            src="https://www.google.com/maps?q=Amman,Jordan&output=embed"
-                        />
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d107732.09338582095!2d35.9190901!3d32.45589285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151b87fec657ac6f%3A0x76f50e7d8eed881d!2sBani%20Obeid%20District!5e0!3m2!1sen!2sjo!4v1792666824986!5m2!1sen!2sjo" width="600" height="450"  allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                            className={`w-full h-full border-0`}
+                        >
+                        </iframe>
                     </div>
                 </div>
             </section>

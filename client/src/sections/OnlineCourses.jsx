@@ -1,5 +1,6 @@
 import { Play, Check } from "lucide-react"
 import { youtube, youtubeLogo, avatar } from "@/assets/assets"
+import trailerVideo from "/videos/trailer.mp4"
 const OnlineCourses = () => {
     return (
 
@@ -13,7 +14,7 @@ const OnlineCourses = () => {
                 </div>
                 {/* Title */}
                 <div className={`title`}>
-                    احترفي فنون الكيك  مجانا من منزلك
+                    احترفي فنون الكيك  مجانا على يوتيوب
                 </div>
             </div>
             {/* Description */}
@@ -25,13 +26,19 @@ const OnlineCourses = () => {
         {/* Cards container */}
         <div className={`w-full h-full flex-1 flex flex-col items-center lg:flex-row lg:items-start gap-10 `}>
            {/* Video container */}
-            <div className={`w-full h-100 lg:w-[60%] lg:h-full bg-gray rounded-sm flex items-center justify-center`}>
-                <div className={`p-5 rounded-full bg-dark cursor-pointer`}>
+            <div className={`relative  w-full h-100 lg:w-[60%] lg:h-full bg-gray rounded-sm flex items-center justify-center`}>
+                <div className={`absolute top-1/2 left-1/2 -translateX-1/2 -translateY-1/2 p-5 rounded-full bg-dark cursor-pointer`}>
                     <Play
                         size={40}
-                        className={`fill-primary text-primary`}
+                        className={`fill-primary text-primary z-100`}
                     />
+                    
                 </div>
+                <video
+                        src={trailerVideo}
+                        preload="auto"
+                        className={`w-full h-full`}
+                    />
             </div>
 
             {/* Channel Info */}
@@ -56,7 +63,7 @@ const OnlineCourses = () => {
                         </span>
                     </div>
                     <a
-                        href=""
+                        href="https://youtube.com/@sawsanqdaisat?si=nzKdHEUO7RN5L9c3"
                         className={` text-xs lg:text-base text-center bg-dark text-neutral py-2 px-5 rounded-md border-3 border-dark font-medium
                                       hover:bg-neutral hover:text-dark transition-all ease-in-out duration-100
                                     
