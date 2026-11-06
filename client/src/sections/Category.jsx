@@ -31,15 +31,15 @@ const Categories = () => {
     }, [])
 
     return (
-        <section className={`section flex-col items-center justify-center gap-10`}>
-            <div className={`flex flex-col items-center justify-center gap-5`}>
+        <section className="mx-auto flex w-full max-w-7xl flex-col items-center justify-start gap-8 px-4 py-12 sm:gap-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+            <div className="flex w-full max-w-3xl flex-col items-center justify-center gap-4 text-center sm:gap-5">
                 <div className={`tagline`}>
                     تصفح تشكيلتنا اللذيذة
                 </div>
                 <div className={`title`}>
                     الاقسام
                 </div>
-                <div className={`description`}>
+                <div className="description max-w-2xl">
                     استكشف مجموعتنا الواسعة من الأصناف الفاخرة وجد طلبك المثالي لمناسبتك
                 </div>
             </div>
@@ -51,7 +51,7 @@ const Categories = () => {
             ) : categories.length === 0 ? (
                 <p className={`text-base text-gray-500 py-10`}>لا توجد أقسام حالياً</p>
             ) : (
-                <div className={`w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 justify-items-center`}>
+                <div className="grid w-full grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4">
                     {categories.map((category) => (
                         <CategoryCard
                             key={category._id}

@@ -53,6 +53,16 @@ export default function Navbar() {
 
               <div className={`flex items-center gap-4`}>
                 {user && <UserAvatar user={user} size="w-8 h-8" />}
+                {user && isAdmin && (
+                    <Link
+                        to="/admin/dashboard"
+                        aria-label="لوحة التحكم"
+                        title="لوحة التحكم"
+                        className="flex h-9 w-9 items-center justify-center rounded-md text-neutral transition-colors hover:bg-white/15"
+                    >
+                      <LayoutDashboard size={20} />
+                    </Link>
+                )}
                 <div onClick={() => setIsMobileMenuOpen(prev => !prev)}>
                   <Menu
                       size={24}
@@ -215,7 +225,6 @@ export default function Navbar() {
       </nav>
   );
 }
-
 
 
 

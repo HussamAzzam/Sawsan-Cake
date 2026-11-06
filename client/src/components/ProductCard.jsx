@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext.jsx";
 const lowestOption = (product) =>
     product.priceOptions.reduce((min, option) => (option.value < min.value ? option : min));
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, compact = false }) => {
     const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -62,7 +62,7 @@ const ProductCard = ({ product }) => {
 
     return (
         <>
-            <div className="min-w-80 bg-neutral rounded-sm flex flex-col gap-5 shrink-0 shadow-md">
+            <div className={`${compact ? "w-full min-w-0" : "min-w-80 shrink-0"} bg-neutral rounded-sm flex flex-col gap-5 shadow-md`}>
                 {/* Image container */}
                 <div className="relative w-full aspect-square">
                     {/* Like button */}
@@ -89,13 +89,13 @@ const ProductCard = ({ product }) => {
                 </div>
 
                 {/* Body */}
-                <div className="w-full flex flex-col gap-10 p-5">
+                <div className="w-full flex flex-col gap-6 p-4 sm:gap-8 sm:p-5">
                     {/* Info */}
-                    <div className="w-full flex flex-col gap-5">
+                    <div className="w-full flex flex-col gap-4 sm:gap-5">
                         {/* Title + price */}
-                        <div className="w-full flex justify-between items-end">
+                        <div className="w-full flex flex-wrap justify-between items-end gap-x-2 gap-y-1">
                             <div className="text-md font-semibold">{product.name}</div>
-                            <div className="text-md font-semibold text-dark" dir="rtl">
+                            <div className="text-md font-semibold text-dark whitespace-nowrap" dir="rtl">
                                 {product.priceOptions.length > 1 && (
                                     <span className="text-base font-normal opacity-60">يبدأ من </span>
                                 )}

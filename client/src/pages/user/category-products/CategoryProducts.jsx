@@ -100,7 +100,7 @@ const CategoryProducts = ({ slug }) => {
 
     if (categoryStatus === "loading") {
         return (
-            <main className="min-h-screen w-full py-nav flex items-center justify-center">
+            <main className="flex min-h-screen w-full items-center justify-center px-4 py-16 sm:px-6 sm:py-20">
                 <p className="text-gray-500">جاري التحميل...</p>
             </main>
         );
@@ -108,7 +108,7 @@ const CategoryProducts = ({ slug }) => {
 
     if (categoryStatus !== "ready") {
         return (
-            <main className="min-h-screen w-full py-nav flex items-center justify-center">
+            <main className="flex min-h-screen w-full items-center justify-center px-4 py-16 sm:px-6 sm:py-20">
                 <p className="text-lg font-semibold text-gray-500">
                     {categoryStatus === "notFound" ? "القسم غير موجود" : "حدث خطأ، حاول مرة أخرى"}
                 </p>
@@ -120,18 +120,18 @@ const CategoryProducts = ({ slug }) => {
     const isLoading = productsStatus === "loading";
 
     return (
-        <main className="min-h-screen w-full py-nav flex flex-col items-center justify-start">
-            <div className="w-[80%] flex items-start py-nav gap-10">
+        <main className="flex min-h-screen w-full flex-col items-center justify-start px-4 pt-24 pb-12 sm:px-6 sm:pt-28 sm:pb-16">
+            <div className="mx-auto flex w-full max-w-7xl flex-col items-stretch gap-6 lg:flex-row lg:items-start lg:gap-8">
                 {/* Right Panel */}
-                <div className="w-[20%] flex flex-col items-start p-5 bg-neutral rounded-sm shadow-md gap-10">
+                <div className="grid w-full grid-cols-1 items-start gap-5 rounded-sm bg-neutral p-4 shadow-md sm:grid-cols-2 sm:p-5 lg:w-64 lg:shrink-0 lg:grid-cols-1 lg:gap-8">
                     {/* Search bar */}
-                    <div className="relative w-full">
+                    <div className="relative w-full min-w-0">
                         <input
                             type="text"
                             placeholder="البحث"
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
-                            className="w-full rounded-[10px] bg-gray py-2 px-3 text-gray-900 font-medium"
+                            className="w-full rounded-[10px] bg-gray px-3 py-2 font-medium text-gray-900"
                         />
                         <Search
                             size={20}
@@ -140,13 +140,13 @@ const CategoryProducts = ({ slug }) => {
                     </div>
 
                     {/* Subcategories */}
-                    <div className="w-full flex flex-col gap-5">
-                        <div className="title text-md">الأقسام</div>
-                        <div className="w-full flex flex-col items-start justify-start gap-5 pr-5">
+                    <div className="flex w-full min-w-0 flex-col gap-3 sm:col-span-2 lg:col-span-1">
+                        <div className="title text-md w-full text-right">الأقسام</div>
+                        <div className="grid w-full grid-cols-2 items-start gap-x-3 gap-y-3 sm:grid-cols-3 lg:grid-cols-1 lg:gap-4 lg:pr-5">
                             {subcategories.map((sub) => (
                                 <label
                                     key={sub.value}
-                                    className="flex items-center justify-start gap-2 cursor-pointer"
+                                    className="flex min-w-0 cursor-pointer items-center justify-start gap-2"
                                 >
                                     <input
                                         type="radio"
@@ -156,7 +156,7 @@ const CategoryProducts = ({ slug }) => {
                                         onChange={() => changeFilter({ subcategory: sub.value })}
                                         className="accent-primary"
                                     />
-                                    <div className="text-base font-semibold opacity-60">{sub.label}</div>
+                                    <div className="text-sm font-semibold opacity-60 sm:text-base">{sub.label}</div>
                                 </label>
                             ))}
                         </div>
@@ -167,7 +167,7 @@ const CategoryProducts = ({ slug }) => {
                         <select
                             value={filters.sort}
                             onChange={(e) => changeFilter({ sort: e.target.value })}
-                            className="w-full appearance-none bg-gray rounded-[10px] py-3 px-3 text-gray-900 font-medium cursor-pointer"
+                            className="w-full cursor-pointer appearance-none rounded-[10px] bg-gray px-3 py-3 font-medium text-gray-900"
                         >
                             <option value="price_asc">من الأرخص للأغلى</option>
                             <option value="price_desc">من الأغلى للأرخص</option>
@@ -180,11 +180,11 @@ const CategoryProducts = ({ slug }) => {
                 </div>
 
                 {/* Products Container */}
-                <div className="w-[80%] flex flex-col gap-10">
+                <div className="flex w-full min-w-0 flex-1 flex-col gap-6 sm:gap-8">
                     {/* Header */}
-                    <div className="w-full flex items-end justify-between">
+                    <div className="flex w-full flex-wrap items-end justify-between gap-2">
                         <div className="title">{category.name}</div>
-                        <div className="text-sm text-gray-500 font-bold">
+                        <div className="text-sm font-bold text-gray-500">
                             عدد المنتجات : {isLoading && products.length === 0 ? "..." : total}
                         </div>
                     </div>
@@ -204,37 +204,37 @@ const CategoryProducts = ({ slug }) => {
                         <>
                             {/* Keep the current products visible (dimmed) while the next request loads */}
                             <div
-                                className={`w-full grid grid-cols-3 gap-10 transition-opacity duration-100
+                                className={`grid w-full grid-cols-1 gap-5 transition-opacity duration-100 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3 xl:gap-8
                                             ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                             >
                                 {products.map((product) => (
-                                    <ProductCard product={product} key={product._id} />
+                                    <ProductCard product={product} key={product._id} compact />
                                 ))}
                             </div>
 
                             {/* Pagination */}
                             {pages > 1 && (
-                                <div className="w-full flex items-center justify-center gap-5">
+                                <div className="flex w-full flex-wrap items-center justify-center gap-3 sm:gap-5">
                                     <button
                                         type="button"
                                         disabled={filters.page <= 1 || isLoading}
                                         onClick={() => goToPage(filters.page - 1)}
-                                        className="bg-light text-dark py-3 px-6 rounded-md font-medium text-base cursor-pointer
+                                        className="cursor-pointer rounded-md bg-light px-4 py-2 font-medium text-sm text-dark
                                                    hover:text-neutral hover:bg-dark transition-all ease-in-out duration-100
-                                                   disabled:opacity-40 disabled:pointer-events-none"
+                                                   disabled:opacity-40 disabled:pointer-events-none sm:px-6 sm:py-3 sm:text-base"
                                     >
                                         السابق
                                     </button>
-                                    <span className="text-base font-semibold">
+                                    <span className="text-sm font-semibold sm:text-base">
                                         صفحة {filters.page} من {pages}
                                     </span>
                                     <button
                                         type="button"
                                         disabled={filters.page >= pages || isLoading}
                                         onClick={() => goToPage(filters.page + 1)}
-                                        className="bg-light text-dark py-3 px-6 rounded-md font-medium text-base cursor-pointer
+                                        className="cursor-pointer rounded-md bg-light px-4 py-2 font-medium text-sm text-dark
                                                    hover:text-neutral hover:bg-dark transition-all ease-in-out duration-100
-                                                   disabled:opacity-40 disabled:pointer-events-none"
+                                                   disabled:opacity-40 disabled:pointer-events-none sm:px-6 sm:py-3 sm:text-base"
                                     >
                                         التالي
                                     </button>

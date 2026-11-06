@@ -19,7 +19,7 @@ import fruitsMix from "/icons/fruits-mix.png";
 
 const Menu = () => {
     return (
-        <section className={`section flex-col gap-20 bg-background items-center lg:items-start`}>
+        <section className={`section flex-col gap-20 bg-background items-center `}>
             {/* Header */}
             <div className={`flex flex-col items-center justify-center gap-5`}>
                 {/* Tagline */}
